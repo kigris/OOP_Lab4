@@ -8,6 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		952E5C8129112D1F008981D0 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 952E5C8029112D1F008981D0 /* main.cpp */; };
+		95F48426291C0B8000AC547A /* booking.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95F48423291BFBF300AC547A /* booking.cpp */; };
+		95F48429291C0CC400AC547A /* accomodation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95F48427291C0CC400AC547A /* accomodation.cpp */; };
+		95F4842C291C0D7500AC547A /* accomodationFeature.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95F4842A291C0D7500AC547A /* accomodationFeature.cpp */; };
+		95F4842F291C0DA200AC547A /* customer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95F4842D291C0DA200AC547A /* customer.cpp */; };
+		95F48432291C0DBF00AC547A /* park.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95F48430291C0DBF00AC547A /* park.cpp */; };
+		95F48435291C0F6000AC547A /* service.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95F48433291C0F6000AC547A /* service.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +31,18 @@
 /* Begin PBXFileReference section */
 		952E5C7D29112D1F008981D0 /* Lab4 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Lab4; sourceTree = BUILT_PRODUCTS_DIR; };
 		952E5C8029112D1F008981D0 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		95F48423291BFBF300AC547A /* booking.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = booking.cpp; sourceTree = "<group>"; };
+		95F48424291BFBF300AC547A /* booking.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = booking.hpp; sourceTree = "<group>"; };
+		95F48427291C0CC400AC547A /* accomodation.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = accomodation.cpp; sourceTree = "<group>"; };
+		95F48428291C0CC400AC547A /* accomodation.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = accomodation.hpp; sourceTree = "<group>"; };
+		95F4842A291C0D7500AC547A /* accomodationFeature.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = accomodationFeature.cpp; sourceTree = "<group>"; };
+		95F4842B291C0D7500AC547A /* accomodationFeature.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = accomodationFeature.hpp; sourceTree = "<group>"; };
+		95F4842D291C0DA200AC547A /* customer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = customer.cpp; sourceTree = "<group>"; };
+		95F4842E291C0DA200AC547A /* customer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = customer.hpp; sourceTree = "<group>"; };
+		95F48430291C0DBF00AC547A /* park.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = park.cpp; sourceTree = "<group>"; };
+		95F48431291C0DBF00AC547A /* park.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = park.hpp; sourceTree = "<group>"; };
+		95F48433291C0F6000AC547A /* service.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = service.cpp; sourceTree = "<group>"; };
+		95F48434291C0F6000AC547A /* service.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = service.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +76,18 @@
 			isa = PBXGroup;
 			children = (
 				952E5C8029112D1F008981D0 /* main.cpp */,
+				95F48423291BFBF300AC547A /* booking.cpp */,
+				95F48424291BFBF300AC547A /* booking.hpp */,
+				95F48427291C0CC400AC547A /* accomodation.cpp */,
+				95F48428291C0CC400AC547A /* accomodation.hpp */,
+				95F4842A291C0D7500AC547A /* accomodationFeature.cpp */,
+				95F4842B291C0D7500AC547A /* accomodationFeature.hpp */,
+				95F4842D291C0DA200AC547A /* customer.cpp */,
+				95F4842E291C0DA200AC547A /* customer.hpp */,
+				95F48430291C0DBF00AC547A /* park.cpp */,
+				95F48431291C0DBF00AC547A /* park.hpp */,
+				95F48433291C0F6000AC547A /* service.cpp */,
+				95F48434291C0F6000AC547A /* service.hpp */,
 			);
 			path = Lab4;
 			sourceTree = "<group>";
@@ -89,7 +119,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastUpgradeCheck = 1400;
+				LastUpgradeCheck = 1410;
 				TargetAttributes = {
 					952E5C7C29112D1F008981D0 = {
 						CreatedOnToolsVersion = 14.0.1;
@@ -119,7 +149,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				95F48429291C0CC400AC547A /* accomodation.cpp in Sources */,
+				95F4842F291C0DA200AC547A /* customer.cpp in Sources */,
+				95F4842C291C0D7500AC547A /* accomodationFeature.cpp in Sources */,
 				952E5C8129112D1F008981D0 /* main.cpp in Sources */,
+				95F48435291C0F6000AC547A /* service.cpp in Sources */,
+				95F48426291C0B8000AC547A /* booking.cpp in Sources */,
+				95F48432291C0DBF00AC547A /* park.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -159,6 +195,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -217,6 +254,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -238,7 +276,9 @@
 		952E5C8529112D1F008981D0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
+				DEAD_CODE_STRIPPING = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -246,7 +286,9 @@
 		952E5C8629112D1F008981D0 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
+				DEAD_CODE_STRIPPING = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
