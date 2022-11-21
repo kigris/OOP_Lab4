@@ -27,9 +27,10 @@ int main(int argc, const char * argv[]){
     while(userType==(byte)0x00){
         // We loop until we get one
         userType = login();
-        displayError<byte>(userType, (byte)0x00, (char*)"You must enter a valid option");
+        displayError<byte>(userType, (byte)0x00, (char*)"Error: You must enter a valid option");
     }
     
+    // TODO
     switch (userType) {
         case COSTUMER_BYTE:
             cout<<"Costumer";
