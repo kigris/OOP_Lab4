@@ -6,9 +6,12 @@
 //
 
 #include <iostream>
+#include "luxuryLevel.hpp"
 using namespace std;
 
 int main(int argc, const char * argv[]) {
-
+    LuxuryLevel lx;
+    lx.getBBQ();
+    std::cout<<lx.getBBQ();
     return 0;
 }

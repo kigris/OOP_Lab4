@@ -8,9 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		952E5C8129112D1F008981D0 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 952E5C8029112D1F008981D0 /* main.cpp */; };
+		95601820292BAB1100BDC544 /* parkCompany.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9560181E292BAB1100BDC544 /* parkCompany.cpp */; };
+		95601823292BB7A200BDC544 /* luxuryLevel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95601821292BB7A200BDC544 /* luxuryLevel.cpp */; };
 		95F48426291C0B8000AC547A /* booking.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95F48423291BFBF300AC547A /* booking.cpp */; };
 		95F48429291C0CC400AC547A /* accomodation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95F48427291C0CC400AC547A /* accomodation.cpp */; };
-		95F4842C291C0D7500AC547A /* accomodationFeature.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95F4842A291C0D7500AC547A /* accomodationFeature.cpp */; };
 		95F4842F291C0DA200AC547A /* customer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95F4842D291C0DA200AC547A /* customer.cpp */; };
 		95F48432291C0DBF00AC547A /* park.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95F48430291C0DBF00AC547A /* park.cpp */; };
 		95F48435291C0F6000AC547A /* service.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95F48433291C0F6000AC547A /* service.cpp */; };
@@ -31,12 +32,14 @@
 /* Begin PBXFileReference section */
 		952E5C7D29112D1F008981D0 /* Lab4 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Lab4; sourceTree = BUILT_PRODUCTS_DIR; };
 		952E5C8029112D1F008981D0 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		9560181E292BAB1100BDC544 /* parkCompany.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = parkCompany.cpp; sourceTree = "<group>"; };
+		9560181F292BAB1100BDC544 /* parkCompany.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = parkCompany.hpp; sourceTree = "<group>"; };
+		95601821292BB7A200BDC544 /* luxuryLevel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = luxuryLevel.cpp; sourceTree = "<group>"; };
+		95601822292BB7A200BDC544 /* luxuryLevel.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = luxuryLevel.hpp; sourceTree = "<group>"; };
 		95F48423291BFBF300AC547A /* booking.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = booking.cpp; sourceTree = "<group>"; };
 		95F48424291BFBF300AC547A /* booking.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = booking.hpp; sourceTree = "<group>"; };
 		95F48427291C0CC400AC547A /* accomodation.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = accomodation.cpp; sourceTree = "<group>"; };
 		95F48428291C0CC400AC547A /* accomodation.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = accomodation.hpp; sourceTree = "<group>"; };
-		95F4842A291C0D7500AC547A /* accomodationFeature.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = accomodationFeature.cpp; sourceTree = "<group>"; };
-		95F4842B291C0D7500AC547A /* accomodationFeature.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = accomodationFeature.hpp; sourceTree = "<group>"; };
 		95F4842D291C0DA200AC547A /* customer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = customer.cpp; sourceTree = "<group>"; };
 		95F4842E291C0DA200AC547A /* customer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = customer.hpp; sourceTree = "<group>"; };
 		95F48430291C0DBF00AC547A /* park.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = park.cpp; sourceTree = "<group>"; };
@@ -80,14 +83,16 @@
 				95F48424291BFBF300AC547A /* booking.hpp */,
 				95F48427291C0CC400AC547A /* accomodation.cpp */,
 				95F48428291C0CC400AC547A /* accomodation.hpp */,
-				95F4842A291C0D7500AC547A /* accomodationFeature.cpp */,
-				95F4842B291C0D7500AC547A /* accomodationFeature.hpp */,
 				95F4842D291C0DA200AC547A /* customer.cpp */,
 				95F4842E291C0DA200AC547A /* customer.hpp */,
 				95F48430291C0DBF00AC547A /* park.cpp */,
 				95F48431291C0DBF00AC547A /* park.hpp */,
 				95F48433291C0F6000AC547A /* service.cpp */,
 				95F48434291C0F6000AC547A /* service.hpp */,
+				9560181E292BAB1100BDC544 /* parkCompany.cpp */,
+				9560181F292BAB1100BDC544 /* parkCompany.hpp */,
+				95601821292BB7A200BDC544 /* luxuryLevel.cpp */,
+				95601822292BB7A200BDC544 /* luxuryLevel.hpp */,
 			);
 			path = Lab4;
 			sourceTree = "<group>";
@@ -150,10 +155,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				95F48429291C0CC400AC547A /* accomodation.cpp in Sources */,
+				95601823292BB7A200BDC544 /* luxuryLevel.cpp in Sources */,
 				95F4842F291C0DA200AC547A /* customer.cpp in Sources */,
-				95F4842C291C0D7500AC547A /* accomodationFeature.cpp in Sources */,
 				952E5C8129112D1F008981D0 /* main.cpp in Sources */,
 				95F48435291C0F6000AC547A /* service.cpp in Sources */,
+				95601820292BAB1100BDC544 /* parkCompany.cpp in Sources */,
 				95F48426291C0B8000AC547A /* booking.cpp in Sources */,
 				95F48432291C0DBF00AC547A /* park.cpp in Sources */,
 			);
