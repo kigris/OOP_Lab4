@@ -10,18 +10,24 @@
 
 #include <stdio.h>
 #include <string>
+#include <vector>
+using std::vector;
+
 using std::string;
 class Customer{
 public:
-    inline string getName() {return name;}
-    void setName();
-    inline string getAddress() {return address;}
-    void setAddress();
-    inline string getMail() {return mail;}
-    void setMail();
+    Customer(string name, string address, string mail);
+    ~Customer();
+    inline string getName() {return m_Name;}
+    bool setName(string name);
+    inline string getAddress() {return m_Address;}
+    void setAddress(string address);
+    inline string getMail() {return m_Mail;}
+    void setMail(string mail);
 private:
-    string name;
-    string address;
-    string mail;
+    static vector<string> g_Names;
+    string m_Name;
+    string m_Address;
+    string m_Mail;
 };
 #endif /* customer_hpp */

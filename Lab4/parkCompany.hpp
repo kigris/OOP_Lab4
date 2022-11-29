@@ -19,21 +19,25 @@ using std::vector;
 
 class ParkCompany{
 public:
-    inline string getName() {return name;}
-    void setName();
-    inline string getAddress() {return address;}
-    void setAddress();
-    inline vector<Park> getParks() {return parks;}
-    void setParks();
-    inline vector<Customer> getCustomer() {return customers;}
-    void setCustomer();
-    inline vector<Booking> getBookings() {return bookings;}
-    void setBookings();
+    ParkCompany(string name, string address);
+    ParkCompany(string name, string address, vector<Park*> parks, vector<Customer*> customers, vector<Booking*> bookings);
+    ~ParkCompany();
+    inline string getName() {return m_Name;}
+    bool setName(string name);
+    inline string getAddress() {return m_Address;}
+    void setAddress(string address);
+    inline vector<Park*> getParks() {return m_Parks;}
+    void setParks(vector<Park*> parks);
+    inline vector<Customer*> getCustomers() {return m_Customers;}
+    void setCustomers(vector<Customer*> customers);
+    inline vector<Booking*> getBookings() {return m_Bookings;}
+    void setBookings(vector<Booking*> bookings);
 private:
-    string name;
-    string address;
-    vector<Park> parks;
-    vector<Customer> customers;
-    vector<Booking> bookings;
+    static vector<string> g_Names;
+    string m_Name;
+    string m_Address;
+    vector<Park*> m_Parks;
+    vector<Customer*> m_Customers;
+    vector<Booking*> m_Bookings;
 };
 #endif /* parkCompany_hpp */

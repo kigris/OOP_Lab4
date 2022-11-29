@@ -13,21 +13,22 @@
 using std::string;
 class LuxuryLevel {
 public:
-    inline bool getBBQ() {return BBQ;}
-    void setBBQ();
-    inline bool getSurroundSystem() {return surroundSystem;}
-    void setSurroundSystem();
-    inline bool getBreakfastService() {return breakfastService;}
-    void setBreakfastService();
-    inline bool getCleaningService() {return cleaningService;}
-    void setCleaningService();
-    inline string getAccomodationKind() {return accomodationKind;}
-    void setAccomodationKind();
+    LuxuryLevel(bool hasBBQ, bool hasSurroundSystem, bool hasBreakfastService, bool hasCleaningService, string hasAccomodationKind);
+    inline bool getBBQ() {return m_BBQ;}
+    void setBBQ(bool has);
+    inline bool getSurroundSystem() {return m_SurroundSystem;}
+    void setSurroundSystem(bool has);
+    inline bool getBreakfastService() {return m_BreakfastService;}
+    void setBreakfastService(bool has);
+    inline bool getCleaningService() {return m_CleaningService;}
+    void setCleaningService(bool has);
+    inline string getAccomodationKind() {return m_AccomodationKind;}
+    void setAccomodationKind(string accomodationKind);
 private:
-    bool BBQ;
-    bool surroundSystem;
-    bool breakfastService;
-    bool cleaningService;
-    string accomodationKind;
+    bool m_BBQ;
+    bool m_SurroundSystem;
+    bool m_BreakfastService;
+    bool m_CleaningService;
+    string m_AccomodationKind;
 };
 #endif /* luxuryLevel_hpp */

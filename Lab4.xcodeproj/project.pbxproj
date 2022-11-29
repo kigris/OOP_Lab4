@@ -7,14 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		952E5C8129112D1F008981D0 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 952E5C8029112D1F008981D0 /* main.cpp */; };
-		95601820292BAB1100BDC544 /* parkCompany.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9560181E292BAB1100BDC544 /* parkCompany.cpp */; };
-		95601823292BB7A200BDC544 /* luxuryLevel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95601821292BB7A200BDC544 /* luxuryLevel.cpp */; };
-		95F48426291C0B8000AC547A /* booking.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95F48423291BFBF300AC547A /* booking.cpp */; };
-		95F48429291C0CC400AC547A /* accomodation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95F48427291C0CC400AC547A /* accomodation.cpp */; };
-		95F4842F291C0DA200AC547A /* customer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95F4842D291C0DA200AC547A /* customer.cpp */; };
-		95F48432291C0DBF00AC547A /* park.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95F48430291C0DBF00AC547A /* park.cpp */; };
-		95F48435291C0F6000AC547A /* service.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95F48433291C0F6000AC547A /* service.cpp */; };
+		959974F529352557009B7C4D /* park.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95F48430291C0DBF00AC547A /* park.cpp */; };
+		959974F629352654009B7C4D /* accomodation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95F48427291C0CC400AC547A /* accomodation.cpp */; };
+		959974F729353B61009B7C4D /* customer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95F4842D291C0DA200AC547A /* customer.cpp */; };
+		959974F829353BB3009B7C4D /* booking.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95F48423291BFBF300AC547A /* booking.cpp */; };
+		959974F92935518E009B7C4D /* service.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95F48433291C0F6000AC547A /* service.cpp */; };
+		959974FA2935534F009B7C4D /* luxuryLevel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95601821292BB7A200BDC544 /* luxuryLevel.cpp */; };
+		959974FB29355662009B7C4D /* parkCompany.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9560181E292BAB1100BDC544 /* parkCompany.cpp */; };
+		9599750029363527009B7C4D /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 952E5C8029112D1F008981D0 /* main.cpp */; };
+		959975032936355D009B7C4D /* customerAPI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 959975012936355D009B7C4D /* customerAPI.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -36,6 +37,8 @@
 		9560181F292BAB1100BDC544 /* parkCompany.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = parkCompany.hpp; sourceTree = "<group>"; };
 		95601821292BB7A200BDC544 /* luxuryLevel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = luxuryLevel.cpp; sourceTree = "<group>"; };
 		95601822292BB7A200BDC544 /* luxuryLevel.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = luxuryLevel.hpp; sourceTree = "<group>"; };
+		959975012936355D009B7C4D /* customerAPI.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = customerAPI.cpp; sourceTree = "<group>"; };
+		959975022936355D009B7C4D /* customerAPI.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = customerAPI.hpp; sourceTree = "<group>"; };
 		95F48423291BFBF300AC547A /* booking.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = booking.cpp; sourceTree = "<group>"; };
 		95F48424291BFBF300AC547A /* booking.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = booking.hpp; sourceTree = "<group>"; };
 		95F48427291C0CC400AC547A /* accomodation.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = accomodation.cpp; sourceTree = "<group>"; };
@@ -93,6 +96,8 @@
 				9560181F292BAB1100BDC544 /* parkCompany.hpp */,
 				95601821292BB7A200BDC544 /* luxuryLevel.cpp */,
 				95601822292BB7A200BDC544 /* luxuryLevel.hpp */,
+				959975012936355D009B7C4D /* customerAPI.cpp */,
+				959975022936355D009B7C4D /* customerAPI.hpp */,
 			);
 			path = Lab4;
 			sourceTree = "<group>";
@@ -154,14 +159,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				95F48429291C0CC400AC547A /* accomodation.cpp in Sources */,
-				95601823292BB7A200BDC544 /* luxuryLevel.cpp in Sources */,
-				95F4842F291C0DA200AC547A /* customer.cpp in Sources */,
-				952E5C8129112D1F008981D0 /* main.cpp in Sources */,
-				95F48435291C0F6000AC547A /* service.cpp in Sources */,
-				95601820292BAB1100BDC544 /* parkCompany.cpp in Sources */,
-				95F48426291C0B8000AC547A /* booking.cpp in Sources */,
-				95F48432291C0DBF00AC547A /* park.cpp in Sources */,
+				959975032936355D009B7C4D /* customerAPI.cpp in Sources */,
+				959974FA2935534F009B7C4D /* luxuryLevel.cpp in Sources */,
+				9599750029363527009B7C4D /* main.cpp in Sources */,
+				959974F829353BB3009B7C4D /* booking.cpp in Sources */,
+				959974F92935518E009B7C4D /* service.cpp in Sources */,
+				959974F629352654009B7C4D /* accomodation.cpp in Sources */,
+				959974FB29355662009B7C4D /* parkCompany.cpp in Sources */,
+				959974F529352557009B7C4D /* park.cpp in Sources */,
+				959974F729353B61009B7C4D /* customer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

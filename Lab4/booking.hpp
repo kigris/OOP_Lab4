@@ -18,25 +18,30 @@ using std::vector;
 
 class Booking{
 public:
-    inline int getId();
-    void setId(int n_id);
-    inline Customer getCustomer() {return customer;}
-    void setCustomer();
-    inline vector<Accomodation> getAccomodations() {return accomodations;}
-    void setAccomodations();
-    inline bool getActivityPass() {return activityPass;}
-    void setActivityPass();
-    inline bool getBicycleRent() {return bicyleRent;}
-    void setBicycleRent();
-    inline bool getSwimmingPass() {return swimmingPass;}
-    void setSwimmingPass();
+    // Constructors, destructors
+    Booking(int id, Customer* customer, vector<Accomodation*> accomodations, bool activityPass, bool bicycleRent, bool swimmingPass);
+    ~Booking();
+    
+    inline int getId(){return m_ID;}
+    bool setID(int id);
+    inline Customer getCustomer() {return *m_Customer;}
+    void setCustomer(Customer* customer);
+    inline vector<Accomodation*> getAccomodations() {return m_Accomodations;}
+    void setAccomodations(vector<Accomodation*> accomodations);
+    inline bool getActivityPass() {return m_ActivityPass;}
+    void setActivityPass(bool activityPass);
+    inline bool getBicycleRent() {return m_BicyleRent;}
+    void setBicycleRent(bool bicycleRent);
+    inline bool getSwimmingPass() {return m_SwimmingPass;}
+    void setSwimmingPass(bool swimmingPass);
 private:
-    int id;
-    Customer customer;
-    vector<Accomodation> accomodations;
-    bool activityPass;
-    bool bicyleRent;
-    bool swimmingPass;
+    static vector<int> g_IDs;
+    int m_ID;
+    Customer* m_Customer=nullptr;
+    vector<Accomodation*> m_Accomodations;
+    bool m_ActivityPass;
+    bool m_BicyleRent;
+    bool m_SwimmingPass;
 };
 
 #endif /* booking_hpp */

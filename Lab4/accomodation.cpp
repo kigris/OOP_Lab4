@@ -7,3 +7,48 @@
 
 #include "accomodation.hpp"
 
+vector<int> Accomodation::g_IDs = {};
+
+Accomodation::Accomodation(int id, int size, int numberPeople, bool bathroomWithBath, LuxuryLevel* luxuryLevel){
+    if(!setID(id)){
+        throw std::invalid_argument("Duplicate ID");
+    }
+    setNumberPeople(numberPeople);
+    setSize(size);
+    setBathroomWithBath(bathroomWithBath);
+    setLuxuryLevel(luxuryLevel);
+}
+
+Accomodation::~Accomodation(){
+    // We remove the ID from the list of IDs used
+    g_IDs.erase(remove(g_IDs.begin(), g_IDs.end(), m_ID), g_IDs.end());
+
+}
+
+bool Accomodation::setID(int id){
+    // Check that the id is not taken
+    for(int i : g_IDs)
+        if(i==id)
+            return false;
+    // If the id given is not found
+    m_ID = id;
+    // We add the id given to the IDs taken
+    g_IDs.push_back(id);
+    return true;
+}
+
+void Accomodation::setNumberPeople(int numberPeople){
+    m_NumberPeople = numberPeople;
+}
+
+void Accomodation::setSize(int size){
+    m_Size = size;
+}
+
+void Accomodation::setBathroomWithBath(bool bathroomWithBath){
+    m_BathroomWithBath = bathroomWithBath;
+}
+
+void Accomodation::setLuxuryLevel(LuxuryLevel* luxuryLevel){
+    m_LuxuryLevel = luxuryLevel;
+}
