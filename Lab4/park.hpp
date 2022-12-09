@@ -18,22 +18,22 @@ using std::vector;
 
 class Park{
 public:
-    Park(string name);
-    Park(string name, string address, vector<Service*> services, vector<Accomodation*> accomodations);
+    Park(string name, string address);
+    Park(string name, string address, Service* services, vector<Accomodation*> accomodations);
     ~Park();
-    inline string getName() {return m_Name;}
+    inline string& getName() {return m_Name;}
     bool setName(string name);
     inline string getAddress() {return m_Address;}
     void setAddress(string address);
-    inline vector<Service*> getServices() {return m_Services;}
-    void setServices(vector<Service*> services);
+    inline Service* getService() {return m_Service;}
+    void setService(Service* service);
     inline vector<Accomodation*> getAcccomodations() {return m_Accomodations;}
     void setAcccomodations(vector<Accomodation*> accomodations);
 private:
     static vector<string> g_Names;
     string m_Name;
     string m_Address;
-    vector<Service*> m_Services;
+    Service* m_Service;
     vector<Accomodation*> m_Accomodations;
 };
 #endif /* park_hpp */

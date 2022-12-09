@@ -10,6 +10,16 @@ using std::string;
 
 vector<int> Booking::g_IDs = {};
 
+Booking::Booking(int id, Customer* customer, bool activityPass, bool bicycleRent, bool swimmingPass){
+    if(!setID(id)){
+        throw std::invalid_argument("Duplicate ID");
+    }
+    setCustomer(customer);
+    setActivityPass(activityPass);
+    setBicycleRent(bicycleRent);
+    setSwimmingPass(swimmingPass);
+};
+
 Booking::Booking(int id, Customer* customer, vector<Accomodation*> accomodations, bool activityPass, bool bicycleRent, bool swimmingPass){
     if(!setID(id)){
         throw std::invalid_argument("Duplicate ID");
@@ -22,6 +32,9 @@ Booking::Booking(int id, Customer* customer, vector<Accomodation*> accomodations
 };
 
 Booking::~Booking(){
+    // We remove the ID from the list of IDs used
+    g_IDs.erase(remove(g_IDs.begin(), g_IDs.end(), m_ID), g_IDs.end());
+    // Delete accomodation
     for(auto a : m_Accomodations)
         delete a;
 }

@@ -19,6 +19,7 @@ using std::vector;
 class Booking{
 public:
     // Constructors, destructors
+    Booking(int id, Customer* customer, bool activityPass, bool bicycleRent, bool swimmingPass);
     Booking(int id, Customer* customer, vector<Accomodation*> accomodations, bool activityPass, bool bicycleRent, bool swimmingPass);
     ~Booking();
     

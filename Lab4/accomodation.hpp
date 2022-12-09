@@ -16,17 +16,25 @@ using  std::vector;
 class Accomodation{
 public:
     Accomodation(int id, int size, int numberPeople, bool bathroomWithBath, LuxuryLevel* luxuryLevel);
-    ~Accomodation();
+    // Virtual destructor, important for ensuring proper cleaning of derived clases
+    virtual ~Accomodation();
+    
+    // Getters
     inline const int getId() const {return m_ID;}
-    bool setID(int id);
     inline const int getNumberPeople() const {return m_NumberPeople;}
-    void setNumberPeople(int numberPeople);
     inline const int getSize() const {return m_Size;}
-    void setSize(int size);
     inline const bool getBathroomWithBath() const {return m_BathroomWithBath;}
-    void setBathroomWithBath(bool bathroomWithBath);
     inline const LuxuryLevel* getLuxuryLevel() const {return m_LuxuryLevel;}
+    
+    // Setters
+    bool setID(int id);
+    void setNumberPeople(int numberPeople);
+    void setSize(int size);
+    void setBathroomWithBath(bool bathroomWithBath);
     void setLuxuryLevel(LuxuryLevel* luxuryLevel);
+    
+    // Other functions
+    virtual void toString()=0; // Pure virtual function
 private:
     static vector<int> g_IDs;
     int m_ID;

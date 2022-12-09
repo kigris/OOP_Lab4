@@ -7,6 +7,7 @@
 
 #include "accomodation.hpp"
 
+// Initialization of the static global IDs
 vector<int> Accomodation::g_IDs = {};
 
 Accomodation::Accomodation(int id, int size, int numberPeople, bool bathroomWithBath, LuxuryLevel* luxuryLevel){
@@ -22,7 +23,7 @@ Accomodation::Accomodation(int id, int size, int numberPeople, bool bathroomWith
 Accomodation::~Accomodation(){
     // We remove the ID from the list of IDs used
     g_IDs.erase(remove(g_IDs.begin(), g_IDs.end(), m_ID), g_IDs.end());
-
+    delete m_LuxuryLevel;
 }
 
 bool Accomodation::setID(int id){
@@ -30,7 +31,9 @@ bool Accomodation::setID(int id){
     for(int i : g_IDs)
         if(i==id)
             return false;
-    // If the id given is not found
+    // We remove the current one
+    g_IDs.erase(remove(g_IDs.begin(), g_IDs.end(), m_ID), g_IDs.end());
+    // If the id given is not taken
     m_ID = id;
     // We add the id given to the IDs taken
     g_IDs.push_back(id);
