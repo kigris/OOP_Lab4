@@ -85,9 +85,13 @@ Park* getPark(VacationPark& vp, int index){
     return vp.getParks().at(index).get();
 }
 
-bool createPark(VacationPark& vp, string name, string address){
+Accomodation* getAccomodation(VacationPark& vp, int parkIndex, int accomodationIndex){
+    return vp.getParks().at(parkIndex).get()->getAcccomodations().at(accomodationIndex);
+}
+
+bool createPark(VacationPark& vp, string name, string address, Service* service){
     // We create the costumer
-    unique_ptr<Park> park = make_unique<Park>(name, address);
+    unique_ptr<Park> park = make_unique<Park>(name, address, service);
     
     // Add the Costumer object to the list of costumers in vp
     try {
@@ -114,16 +118,123 @@ bool updateParkFeature(Park* park, string input, PARK_EDIT_OPT opt){
     return true;
 }
 
-bool updateParkMultipleFeatures(Park* park, bool input[]){
+bool updateParkServices(Park* park, bool input[]){
     Service* service = new Service{input[0],input[1],input[2],input[3],input[4],input[5]};
     park->setService(service);
     return true;
 }
 
 bool deletePark(int index, VacationPark& vp){
-    vp.getParks().erase(vp.getParks().begin()+index);
+    vector<unique_ptr<Park>>& parks = vp.getParks();
+    parks.erase(parks.begin()+index);
     return true;
 }
+
+Service* createService(map<int,void*>* args){
+    return new Service((static_cast<Value<bool>*>(args->at(1)))->value,
+                       (static_cast<Value<bool>*>(args->at(2)))->value,
+                       (static_cast<Value<bool>*>(args->at(3)))->value,
+                       (static_cast<Value<bool>*>(args->at(4)))->value,
+                       (static_cast<Value<bool>*>(args->at(5)))->value,
+                       (static_cast<Value<bool>*>(args->at(6)))->value);
+}
+
+bool createAccomodation(vector<Accomodation*>& accomodations, map<int,void*>* args, ACC_TYPE type){
+    if(type==ACC_TYPE::HOTELROOM){
+        // Build the luxuryLevel object first
+        LuxuryLevel* luxuryLevel = new LuxuryLevel((static_cast<Value<bool>*>(args->at(9)))->value,
+                                                   (static_cast<Value<bool>*>(args->at(10)))->value,
+                                                   (static_cast<Value<bool>*>(args->at(11)))->value,
+                                                   (static_cast<Value<bool>*>(args->at(12)))->value,
+                                                   (static_cast<Value<string>*>(args->at(13)))->value);
+        Accomodation* hotelRoom = new HotelRoom((static_cast<Value<int>*>(args->at(1)))->value,
+                                                (static_cast<Value<int>*>(args->at(2)))->value,
+                                                (static_cast<Value<int>*>(args->at(3)))->value,
+                                                (static_cast<Value<bool>*>(args->at(4)))->value,
+                                                luxuryLevel,
+                                                (static_cast<Value<int>*>(args->at(5)))->value,
+                                                (static_cast<Value<string>*>(args->at(6)))->value,
+                                                (static_cast<Value<int>*>(args->at(7)))->value,
+                                                (static_cast<Value<bool>*>(args->at(8)))->value);
+        accomodations.emplace_back(hotelRoom);
+        return true;
+    } else if(type==ACC_TYPE::CABIN){
+        // Build the luxuryLevel object first
+        LuxuryLevel* luxuryLevel = new LuxuryLevel((static_cast<Value<bool>*>(args->at(6)))->value,
+                                                   (static_cast<Value<bool>*>(args->at(7)))->value,
+                                                   (static_cast<Value<bool>*>(args->at(8)))->value,
+                                                   (static_cast<Value<bool>*>(args->at(9)))->value,
+                                                   (static_cast<Value<string>*>(args->at(10)))->value);
+        Accomodation* cabin = new Cabin((static_cast<Value<int>*>(args->at(1)))->value,
+                                        (static_cast<Value<int>*>(args->at(2)))->value,
+                                        (static_cast<Value<int>*>(args->at(3)))->value,
+                                        (static_cast<Value<bool>*>(args->at(4)))->value,
+                                        luxuryLevel,
+                                        (static_cast<Value<int>*>(args->at(5)))->value);
+        accomodations.emplace_back(cabin);
+        return true;
+    }
+    return false;
+}
+
+bool updateAccomodation(Accomodation* accomodation, map<int,void*>* args, ACC_TYPE type){
+    if(type==ACC_TYPE::HOTELROOM){
+        // Build the luxuryLevel object first
+        LuxuryLevel* luxuryLevel = new LuxuryLevel((static_cast<Value<bool>*>(args->at(9)))->value,
+                                                   (static_cast<Value<bool>*>(args->at(10)))->value,
+                                                   (static_cast<Value<bool>*>(args->at(11)))->value,
+                                                   (static_cast<Value<bool>*>(args->at(12)))->value,
+                                                   (static_cast<Value<string>*>(args->at(13)))->value);
+        // Update the hotelroom accomodation
+        HotelRoom* hotelRoom = dynamic_cast<HotelRoom*>(accomodation);
+        hotelRoom->setID((static_cast<Value<int>*>(args->at(1)))->value);
+        hotelRoom->setNumberPeople((static_cast<Value<int>*>(args->at(2)))->value);
+        hotelRoom->setSize((static_cast<Value<int>*>(args->at(3)))->value);
+        hotelRoom->setBathroomWithBath((static_cast<Value<bool>*>(args->at(4)))->value);
+        hotelRoom->setBathroomWithBath(luxuryLevel);
+        hotelRoom->setFloor((static_cast<Value<int>*>(args->at(5)))->value);
+        hotelRoom->setLocation((static_cast<Value<string>*>(args->at(6)))->value);
+        hotelRoom->setNumberOfBeds((static_cast<Value<int>*>(args->at(7)))->value);
+        hotelRoom->setChildrenBed((static_cast<Value<bool>*>(args->at(8)))->value);
+        return true;
+    } else if(type==ACC_TYPE::CABIN){
+        // Build the luxuryLevel object first
+        LuxuryLevel* luxuryLevel = new LuxuryLevel((static_cast<Value<bool>*>(args->at(6)))->value,
+                                                   (static_cast<Value<bool>*>(args->at(7)))->value,
+                                                   (static_cast<Value<bool>*>(args->at(8)))->value,
+                                                   (static_cast<Value<bool>*>(args->at(9)))->value,
+                                                   (static_cast<Value<string>*>(args->at(10)))->value);
+        // Update the cabin accomodation
+        Cabin* cabin = dynamic_cast<Cabin*>(accomodation);
+        cabin->setID((static_cast<Value<int>*>(args->at(1)))->value);
+        cabin->setNumberPeople((static_cast<Value<int>*>(args->at(2)))->value);
+        cabin->setSize((static_cast<Value<int>*>(args->at(3)))->value);
+        cabin->setBathroomWithBath((static_cast<Value<bool>*>(args->at(4)))->value);
+        cabin->setBathroomWithBath(luxuryLevel);
+        cabin->setBedrooms((static_cast<Value<int>*>(args->at(5)))->value);
+        return true;
+    }
+    return false;
+    
+}
+
+bool deleteAccomodation(int parkIndex, int accomodationIndex, VacationPark& vp){
+    Park* p = vp.getParks()[parkIndex].get();
+#ifdef DEBUG
+    const size_t accSizeBefore = p->getAcccomodations().size();
+#endif
+    // Delete the accomodation of the memory first
+    delete p->getAcccomodations()[accomodationIndex];
+    // Then delete the pointer from the vector
+    p->getAcccomodations().erase(p->getAcccomodations().begin()+accomodationIndex);
+#ifdef DEBUG
+    const size_t accSizeAfter = p->getAcccomodations().size();
+    // Check if the accomodation has shrink
+    assert(accSizeAfter<accSizeBefore);
+#endif
+    return true;
+}
+
 /// ownerAPI namespace end
 ///
 ///

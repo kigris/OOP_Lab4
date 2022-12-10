@@ -10,6 +10,7 @@
 
 #include <stdio.h>
 #include <vector>
+#include <iostream>
 #include "luxuryLevel.hpp"
 using  std::vector;
 
@@ -35,12 +36,15 @@ public:
     
     // Other functions
     virtual void toString()=0; // Pure virtual function
+    inline void incRefCount(){m_RefCount++;}
+    inline void decRefCount(){m_RefCount--;};
 private:
     static vector<int> g_IDs;
+    int m_RefCount{0};
     int m_ID;
     int m_NumberPeople;
     int m_Size;
     bool m_BathroomWithBath;
-    LuxuryLevel* m_LuxuryLevel;
+    LuxuryLevel* m_LuxuryLevel{nullptr};
 };
 #endif /* accomodation_hpp */

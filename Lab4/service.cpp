@@ -7,14 +7,6 @@
 
 #include "service.hpp"
 
-Service::Service():
-    m_SubtropicSwimmingPool(false),
-    m_SportsInfrastructure(false),
-    m_BowlingAlley(false),
-    m_BicycleRent(false),
-    m_ChildrenParadise(false),
-    m_WaterBikes(false){}
-
 Service::Service(bool hasSubtropicSwimmingPool, bool hasSportsInfrastructure, bool hasBowlingAlley, bool hasBicycleRent, bool hasChildrenParadise, bool hasWaterBikes){
     setSubtropicSwimmingPool(hasSubtropicSwimmingPool);
     setSportsInfrastructure(hasSportsInfrastructure);

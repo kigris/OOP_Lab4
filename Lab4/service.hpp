@@ -13,7 +13,6 @@
 using std::string;
 class Service{
 public:
-    Service();
     Service(bool hasSubtropicSwimmingPool, bool hasSportsInfrastructure, bool hasBowlingAlley, bool hasBicycleRent, bool hasChildrenParadise, bool hasWaterBikes);
     inline bool getSubtropicSwimmingPool() {return m_SubtropicSwimmingPool;}
     void setSubtropicSwimmingPool(bool has);

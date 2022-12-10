@@ -60,7 +60,9 @@ void displayCustomerMenu() {
     cout << "Enter your choice: ";
 }
 
-void displayOwnerMenu() {
+namespace owner{
+
+int (&displayOwnerMenu())[2] {
     cout << endl;
     cout << tabSpace() << tabSpace();
     cout << "--- Owner ---" << endl;
@@ -75,9 +77,26 @@ void displayOwnerMenu() {
     cout << tabSpace() << tabSpace() << tabSpace();
     cout << "5. Edit Accomodation" << endl;
     cout << tabSpace() << tabSpace() << tabSpace();
-    cout << "5. Delete Accomodation" << endl;
+    cout << "6. Delete Accomodation" << endl;
+    cout << tabSpace() << tabSpace() << tabSpace();
+    cout << "7. Go back to main menu" << endl;
     cout << tabSpace() << tabSpace() << tabSpace();
     cout << "Enter your choice: ";
+    static int choicesRange[2]{1,7};
+    return choicesRange;
+}
+
+int (&parkUpdateMenu())[2]{
+    cout << endl <<"Want you want to do?"<<endl;
+    cout << tabSpace() << "1. Update name"<<endl;
+    cout << tabSpace() << "2. Update address"<<endl;
+    cout << tabSpace() << "3. Update services"<<endl;
+    cout << tabSpace() << "4. Exit"<<endl;
+    cout << tabSpace() << "Enter your choice: ";
+    static int choicesRange[2]{1,4};
+    return choicesRange;
+}
+
 }
 
 }

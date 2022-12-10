@@ -10,12 +10,19 @@
 
 #include "vacationPark.hpp"
 #include "utils.hpp"
+#include "hotelRoom.hpp"
+#include "cabin.hpp"
 #include <vector>
 #include <iostream>
 #include <regex>
+#include <typeindex>
+#include <map>
 #include <string>
 using namespace std;
-using namespace std::placeholders;
+
+#ifdef DEBUG
+    #include <cassert>
+#endif
 
 // Enumeration for main menu options
 enum class PARK_EDIT_OPT {
@@ -25,6 +32,13 @@ enum class PARK_EDIT_OPT {
     FILE_MANAGEMENT = 4,
     EXIT = 5
 };
+
+// Container to wrap a generic value
+template <typename T> struct Value {
+    Value(T input){value=input;}
+    T value;
+};
+
 namespace customerAPI{
 bool createCustomer(VacationPark& vp, string name, string address, string mail);
 bool findCustomer(vector<unique_ptr<Customer>>& customers, string customerName);
@@ -33,13 +47,23 @@ bool updateCustomer(Customer*& customer, string name, string address, string mai
 
 }
 namespace ownerAPI {
+enum class ACC_TYPE {
+    HOTELROOM = 1,
+    CABIN = 2
+};
+
 bool findPark(vector<unique_ptr<Park>>& parks, string parkName);
-bool createPark(VacationPark& vp, string name, string address);
+bool createPark(VacationPark& vp, string name, string address, Service* service);
+Service* createService(map<int,void*>* args);
 bool updateParkFeature(Park* park, string input, PARK_EDIT_OPT opt);
-bool updateParkMultipleFeatures(Park* park, bool input[]);
+bool updateParkServices(Park* park, bool input[]);
 bool deletePark(int index, VacationPark& vp);
 Park* getPark(VacationPark& vp, int index);
+Accomodation* getAccomodation(VacationPark& vp, int parkIndex, int accomodationIndex);
 bool findAccomodation(vector<unique_ptr<Park>>& parks, int id);
+bool createAccomodation(vector<Accomodation*>& accomodations, map<int,void*>* args, ACC_TYPE type);
+bool updateAccomodation(Accomodation* accomodation, map<int,void*>* args, ACC_TYPE type);
+bool deleteAccomodation(int parkIndex, int accomodationIndex, VacationPark& vp);
 }
 
 #endif /* vacationParkAPI_hpp */

@@ -18,7 +18,7 @@ using std::vector;
 
 class Park{
 public:
-    Park(string name, string address);
+    Park(string name, string address, Service* service);
     Park(string name, string address, Service* services, vector<Accomodation*> accomodations);
     ~Park();
     inline string& getName() {return m_Name;}
@@ -27,7 +27,7 @@ public:
     void setAddress(string address);
     inline Service* getService() {return m_Service;}
     void setService(Service* service);
-    inline vector<Accomodation*> getAcccomodations() {return m_Accomodations;}
+    inline vector<Accomodation*>& getAcccomodations() {return m_Accomodations;}
     void setAcccomodations(vector<Accomodation*> accomodations);
 private:
     static vector<string> g_Names;

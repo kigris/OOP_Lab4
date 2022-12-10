@@ -15,12 +15,12 @@ using std::vector;
 
 vector<string> Park::g_Names={};
 
-Park::Park(string name, string address){
+Park::Park(string name, string address, Service* service){
     if(!setName(name)){
         throw std::invalid_argument("Duplicate name");
     }
     setAddress(address);
-    m_Service = new Service();
+    setService(service);
 };
 
 Park::Park(string name, string address, Service* service, vector<Accomodation*> accomodations){
@@ -38,6 +38,8 @@ Park::~Park(){
     // Delete accomodations
     for(auto a : m_Accomodations)
         delete a;
+    // Free up the service
+    delete m_Service;
 }
 
 bool Park::setName(string name) {
@@ -62,10 +64,19 @@ void Park::setAddress(string address){
 }
 
 void Park::setService(Service* service){
-    delete m_Service;
-    m_Service = service;
+    // If we have a service set already
+    if(m_Service!=nullptr)
+        // Free the memory of that service
+        delete m_Service;
+    m_Service = service; // Assign the new service
 }
 
 void Park::setAcccomodations(vector<Accomodation*> accomodations){
+    // If the accomodations are not empty
+    if(!accomodations.empty())
+        // Go through all the elements of accomodations
+        for(auto acc : accomodations)
+            delete acc; // Delete the memory
+    accomodations.clear(); // Clear the vector
     m_Accomodations = accomodations;
 }

@@ -20,7 +20,11 @@ namespace menus{
 void displayCustomerMenu();
 void displayMainMenu();
 void displayCustomerLoginMenu(string name);
-void displayOwnerMenu();
+
+namespace owner{
+int (&displayOwnerMenu())[2];
+int (&parkUpdateMenu())[2];
+}
 
 }
 #endif /* menus_hpp */

@@ -21,9 +21,16 @@ Accomodation::Accomodation(int id, int size, int numberPeople, bool bathroomWith
 }
 
 Accomodation::~Accomodation(){
+#ifdef DEBUG
+    std::cout<<"Accomodation Destructor, before cleaning, g_IDS size: " << g_IDs.size() <<std::endl;
+#endif
     // We remove the ID from the list of IDs used
     g_IDs.erase(remove(g_IDs.begin(), g_IDs.end(), m_ID), g_IDs.end());
+    // Delete the luxuryLevel memory
     delete m_LuxuryLevel;
+#ifdef DEBUG
+    std::cout<<"Accomodation Destructor, after cleaning, g_IDS size: " << g_IDs.size() <<std::endl;
+#endif
 }
 
 bool Accomodation::setID(int id){
@@ -53,5 +60,9 @@ void Accomodation::setBathroomWithBath(bool bathroomWithBath){
 }
 
 void Accomodation::setLuxuryLevel(LuxuryLevel* luxuryLevel){
+    // If there is one existing luxuryLevel, free the memory in the heap
+    if(m_LuxuryLevel!=nullptr)
+        delete m_LuxuryLevel;
+    // Assign the new pointer with the new memory
     m_LuxuryLevel = luxuryLevel;
 }

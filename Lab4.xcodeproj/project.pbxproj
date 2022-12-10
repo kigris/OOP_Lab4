@@ -19,6 +19,7 @@
 		9599753F2938BC91009B7C4D /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 952E5C8029112D1F008981D0 /* main.cpp */; };
 		95E82202294295A300A08D15 /* hotelRoom.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95E82200294295A300A08D15 /* hotelRoom.cpp */; };
 		95E82205294295AA00A08D15 /* cabin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95E82203294295AA00A08D15 /* cabin.cpp */; };
+		95E822082944E63F00A08D15 /* unitTesting.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95E822062944E63F00A08D15 /* unitTesting.cpp */; };
 		95FF3102293A7B57001571CF /* UI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 958F2187293A12C100118583 /* UI.cpp */; };
 		95FF3103293A7B5F001571CF /* vacationParkAPI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 959975012936355D009B7C4D /* vacationParkAPI.cpp */; };
 /* End PBXBuildFile section */
@@ -56,6 +57,8 @@
 		95E82201294295A300A08D15 /* hotelRoom.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = hotelRoom.hpp; sourceTree = "<group>"; };
 		95E82203294295AA00A08D15 /* cabin.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = cabin.cpp; sourceTree = "<group>"; };
 		95E82204294295AA00A08D15 /* cabin.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = cabin.hpp; sourceTree = "<group>"; };
+		95E822062944E63F00A08D15 /* unitTesting.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = unitTesting.cpp; sourceTree = "<group>"; };
+		95E822072944E63F00A08D15 /* unitTesting.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = unitTesting.hpp; sourceTree = "<group>"; };
 		95F48423291BFBF300AC547A /* booking.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = booking.cpp; sourceTree = "<group>"; };
 		95F48424291BFBF300AC547A /* booking.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = booking.hpp; sourceTree = "<group>"; };
 		95F48427291C0CC400AC547A /* accomodation.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = accomodation.cpp; sourceTree = "<group>"; };
@@ -127,6 +130,8 @@
 				95E82201294295A300A08D15 /* hotelRoom.hpp */,
 				95E82203294295AA00A08D15 /* cabin.cpp */,
 				95E82204294295AA00A08D15 /* cabin.hpp */,
+				95E822062944E63F00A08D15 /* unitTesting.cpp */,
+				95E822072944E63F00A08D15 /* unitTesting.hpp */,
 			);
 			path = Lab4;
 			sourceTree = "<group>";
@@ -196,6 +201,7 @@
 				95E82202294295A300A08D15 /* hotelRoom.cpp in Sources */,
 				958F217829395C6E00118583 /* accomodation.cpp in Sources */,
 				959974F92935518E009B7C4D /* service.cpp in Sources */,
+				95E822082944E63F00A08D15 /* unitTesting.cpp in Sources */,
 				958F217D29395C7E00118583 /* booking.cpp in Sources */,
 				958F21832939696A00118583 /* menus.cpp in Sources */,
 				958F2180293961DD00118583 /* utils.cpp in Sources */,

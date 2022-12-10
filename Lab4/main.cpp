@@ -11,6 +11,7 @@
 #include "utils.hpp"
 #include "menus.hpp"
 #include "UI.hpp"
+#include "unitTesting.hpp"
 using namespace std;
 
 // Enumeration for main menu options
@@ -67,5 +68,6 @@ int main(int argc, const char * argv[]){
             break;
         }
     }
+//    testCreationAndDeletionParks(500);
     return 0;
 }
