@@ -22,6 +22,7 @@ inline void waitForEnter(bool newLineAfter=false) {
     else
         cout << "Press 'Enter' to continue...";
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    cin.clear();
 }
 // Print tab function
 inline string tabSpace(){
@@ -35,4 +36,5 @@ inline string convToLower(string str){
 
 int getUserChoice(int min);
 int getUserChoice(int min, int max);
+string randIDGen(const int len, const string& input);
 #endif /* utils_hpp */

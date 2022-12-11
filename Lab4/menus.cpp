@@ -9,7 +9,7 @@
 
 namespace menus{
 
-void displayCustomerLoginMenu(string name) {
+int (&displayCustomerLoginMenu(string name))[2] {
     cout << endl;
     cout << tabSpace() << tabSpace() << tabSpace() << tabSpace();
     cout << "Welcome " << name << "! What do you want to do?" << endl;
@@ -18,15 +18,27 @@ void displayCustomerLoginMenu(string name) {
     cout << tabSpace() << tabSpace() << tabSpace() << tabSpace() << tabSpace();
     cout << "2. Create booking" << endl;
     cout << tabSpace() << tabSpace() << tabSpace() << tabSpace() << tabSpace();
-    cout << "3. Search for bookings" << endl;
+    cout << "3. Change booking" << endl;
     cout << tabSpace() << tabSpace() << tabSpace() << tabSpace() << tabSpace();
-    cout << "4. Book accommodations" << endl;
-    cout << tabSpace() << tabSpace() << tabSpace() << tabSpace() << tabSpace();
-    cout << "5. Edit bookings" << endl;
-    cout << tabSpace() << tabSpace() << tabSpace() << tabSpace() << tabSpace();
-    cout << "6. Log out" << endl;
+    cout << "4. Log out" << endl;
     cout << tabSpace() << tabSpace() << tabSpace() << tabSpace() << tabSpace();
     cout << "Enter your choice: ";
+    static int choicesRange[2]{1,4};
+    return choicesRange;
+}
+
+int (&displayBookingMenu(string bookingID))[2] {
+    cout << endl;
+    cout << tabSpace();
+    cout << "Editing booking with ID " << bookingID << endl;
+    cout << tabSpace() << "What do you want to do?" << endl;
+    cout << tabSpace() << tabSpace() <<"1. Add accomodations to bookings" <<endl;
+    cout << tabSpace() << tabSpace() <<"2. Remove accomodations from bookings" <<endl;
+    cout << tabSpace() << tabSpace() <<"3. Book park services" <<endl;
+    cout << tabSpace() << tabSpace() <<"4. Exit"<<endl;
+    cout << tabSpace() << tabSpace() << "Enter your choice: ";
+    static int choicesRange[2]{1,4};
+    return choicesRange;
 }
 
 // Display main menu

@@ -44,8 +44,16 @@ bool createCustomer(VacationPark& vp, string name, string address, string mail);
 bool findCustomer(vector<unique_ptr<Customer>>& customers, string customerName);
 bool findCustomer(vector<unique_ptr<Customer>>& customers, string customerName, Customer*& customer);
 bool updateCustomer(Customer*& customer, string name, string address, string mail);
-
+bool findBooking(vector<unique_ptr<Booking>>& bookings, string id);
+bool createBooking(VacationPark& vp, Customer* customer, Accomodation* accomodation, string id, bool activityPass, bool bicycleRent, bool swimmingPass);
+bool updateBooking(Booking* booking, Accomodation* accomodation);
+bool removeAccFromBooking(Booking* booking, Accomodation* accomodation);
+Park* getBookingPark(VacationPark& vp, Booking* booking);
+bool setBookingServices(Booking* booking, bool passes[4]);
 }
+
+
+
 namespace ownerAPI {
 enum class ACC_TYPE {
     HOTELROOM = 1,

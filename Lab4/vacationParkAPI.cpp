@@ -7,63 +7,10 @@
 
 #include "vacationParkAPI.hpp"
 
-namespace customerAPI{
-/// customerAPI namespace begin
-///
-///
-bool createCustomer(VacationPark& vp, string name, string address, string mail){
-    // We create the costumer
-    unique_ptr<Customer> customer = make_unique<Customer>(name, address, mail);
-    
-    // Add the Costumer object to the list of costumers in vp
-    try {
-        vp.getCustomers().emplace_back(move(customer));
-    } catch(exception){
-        return false;
-    }
-    return true;
-}
-
-
-bool findCustomer(vector<unique_ptr<Customer>>& customers, string customerName){
-    for(auto const& c : customers)
-        if(convToLower(c->getName()) == convToLower(customerName))
-            return true;
-    return false;
-}
-
-bool findCustomer(vector<unique_ptr<Customer>>& customers, string customerName, Customer*& customer){
-    for(auto const& c : customers)
-        if(convToLower(c->getName()) == convToLower(customerName)){
-            customer = c.get();
-            return true;
-        }
-    
-    return false;
-}
-
-
-bool updateCustomer(Customer*& customer, string name, string address, string mail){
-    try {
-        customer->setName(name);
-        customer->setAddress(address);
-        customer->setMail(mail);
-    } catch(exception) {
-        return false;
-    }
-    return true;
-}
-/// customerAPI namespace end
-///
-///
-}
-
-
-
 namespace ownerAPI{
 /// ownerAPI namespace begin
-///
-///
+/// ownerAPI namespace begin
+/// ownerAPI namespace begin
 bool findAccomodation(vector<unique_ptr<Park>>& parks, int id){
     // Look over all the parks
     for(auto const& p : parks)
@@ -126,6 +73,11 @@ bool updateParkServices(Park* park, bool input[]){
 
 bool deletePark(int index, VacationPark& vp){
     vector<unique_ptr<Park>>& parks = vp.getParks();
+    // Check if the park has an accomodation that is booked
+    for(auto a : parks[index]->getAcccomodations())
+        if(a->isReserved())
+            return false;
+    // If not, it can be deleted
     parks.erase(parks.begin()+index);
     return true;
 }
@@ -220,6 +172,9 @@ bool updateAccomodation(Accomodation* accomodation, map<int,void*>* args, ACC_TY
 
 bool deleteAccomodation(int parkIndex, int accomodationIndex, VacationPark& vp){
     Park* p = vp.getParks()[parkIndex].get();
+    // If the accomodation is reserved, it can not be deleted
+    if(p->getAcccomodations()[accomodationIndex]->isReserved())
+        return false;
 #ifdef DEBUG
     const size_t accSizeBefore = p->getAcccomodations().size();
 #endif
@@ -236,6 +191,144 @@ bool deleteAccomodation(int parkIndex, int accomodationIndex, VacationPark& vp){
 }
 
 /// ownerAPI namespace end
-///
-///
+/// ownerAPI namespace end
+/// ownerAPI namespace end
+}
+
+
+
+namespace customerAPI{
+/// customerAPI namespace begin
+/// customerAPI namespace begin
+/// customerAPI namespace begin
+bool createCustomer(VacationPark& vp, string name, string address, string mail){
+    // We create the costumer
+    unique_ptr<Customer> customer = make_unique<Customer>(name, address, mail);
+    
+    // Add the Costumer object to the list of costumers in vp
+    try {
+        vp.getCustomers().emplace_back(move(customer));
+    } catch(exception){
+        return false;
+    }
+    return true;
+}
+
+
+bool findCustomer(vector<unique_ptr<Customer>>& customers, string customerName){
+    for(auto const& c : customers)
+        if(convToLower(c->getName()) == convToLower(customerName))
+            return true;
+    return false;
+}
+
+bool findCustomer(vector<unique_ptr<Customer>>& customers, string customerName, Customer*& customer){
+    for(auto const& c : customers)
+        if(convToLower(c->getName()) == convToLower(customerName)){
+            customer = c.get();
+            return true;
+        }
+    return false;
+}
+
+
+bool updateCustomer(Customer*& customer, string name, string address, string mail){
+    try {
+        customer->setName(name);
+        customer->setAddress(address);
+        customer->setMail(mail);
+    } catch(exception) {
+        return false;
+    }
+    return true;
+}
+
+bool findBooking(vector<unique_ptr<Booking>>& bookings, string id){
+    // Look over all the parks
+    for(auto const& b : bookings)
+        // Look over all the accomodations of a park
+        if(b->getId() == id)
+            return true;
+    return false;
+}
+
+bool createBooking(VacationPark& vp, Customer* customer, Accomodation* accomodation, string id, bool activityPass, bool bicycleRent, bool swimmingPass){
+    auto& bookings = vp.getBookings(); // Get a reference to bookings
+    try{
+        // Try to create and add the new booking
+        Booking* b = new Booking(id, customer, activityPass, bicycleRent, swimmingPass);
+        b->getAccomodations().emplace_back(accomodation);
+        // Mark the accomodation as used
+        bookings.emplace_back(b);
+        accomodation->reserve();}
+    catch(...){
+        return false;}
+    return true;
+}
+
+bool updateBooking(Booking* booking, Accomodation* accomodation){
+    try{
+        // Try to update the existing booking
+        booking->getAccomodations().emplace_back(accomodation);
+        // Mark the accomodation as used
+        accomodation->reserve();}
+    catch(...){
+        return false;}
+    return true;
+}
+
+bool removeAccFromBooking(Booking* booking, Accomodation* accomodation){
+    auto& accomodations = booking->getAccomodations();
+    try{
+        // Try to delete the accomodation from the booking
+        // First get the iterator of the new end of the vector
+        auto last = remove(accomodations.begin(), accomodations.end(), accomodation);
+        accomodations.erase(last, accomodations.end()); // Erase from there until the end
+        // Mark the accomodation as unused
+        accomodation->release();
+        // If now the booking is empty, remove all the services booked
+        if(booking->getAccomodations().empty()){
+            booking->setSportsPass(false);
+            booking->setActivityPass(false);
+            booking->setSwimmingPass(false);
+            booking->setBicycleRentPass(false);}
+    }
+    catch(...){
+        return false;}
+    return true;
+}
+
+Park* getBookingPark(VacationPark& vp, Booking* booking){
+    Park* park{nullptr};
+    bool found{false};
+    // Iterate over all the parks
+    for(auto const& p : vp.getParks()){
+        // If have been found
+        if(found) break; // break
+        // Iterate over all the accomodations
+        for(auto const& a : p->getAcccomodations()){
+            // Find the accomodation with the same id as the first accomodation of the booking
+            if(a->getId()==booking->getAccomodations()[0]->getId()){
+                park = p.get();
+                found=true;
+                break;}}}
+    return park;
+}
+
+bool setBookingServices(Booking* booking, bool passes[4]){
+    // Try to set the booking services
+    try{
+        booking->setSwimmingPass(passes[0]);
+        booking->setSportsPass(passes[1]);
+        booking->setActivityPass(passes[2]);
+        booking->setBicycleRentPass(passes[3]);
+    } catch(...){
+        return false;
+    }
+    return true;
+}
+
+/// customerAPI namespace end
+/// customerAPI namespace end
+/// customerAPI namespace end
 }

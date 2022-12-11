@@ -30,7 +30,7 @@ void testCreationAndDeletionParks(int numberOfParks) {
         ownerAPI::createPark(vacationPark, name, address, service);
     }
     
-    for(size_t i = vacationPark.getParks().size(); i-- != 0;)
+    for(size_t i = vacationPark.getParks().size(); i-- > 0;)
     {
         ownerAPI::deletePark((int)i, vacationPark);
     }

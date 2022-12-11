@@ -21,6 +21,7 @@ using namespace std;
 const regex nameRegex("[a-zA-Z]+");
 const regex addressRegex("[a-zA-Z0-9 ]+");
 const regex stringRegex("[a-zA-Z0-9/:]+ *");
+const int BOOKING_ID_LENGTH{8};
 
 namespace owner{
 void accessAsOwner(VacationPark& vp);
@@ -44,6 +45,19 @@ void registerCustomer(VacationPark& vp);
 bool getCustomerDetails(VacationPark& vp,string& name, string& address, string& email);
 void editCustomer(Customer*& customer, VacationPark& vp);
 void createBooking(VacationPark& vp, Customer* customer);
+map<int, tuple<Accomodation*, Park*>>* filterAccomodations(map<int, void*>* args, VacationPark& vp, Park* park=nullptr);
+string generateBookingID(Customer* customer);
+void editBookings(VacationPark& vp, Customer* customer);
+bool existBookings(VacationPark& vp, Customer* customer);
+Booking* getBookings(VacationPark& vp, Customer* customer, string displayText);
+void addAccomodation(Booking* booking, VacationPark& vp);
+void removeAccomodation(Booking* booking, VacationPark& vp);
+Accomodation* getAccomodationFiltered(VacationPark& vp, Park* p=nullptr, Booking* booking=nullptr);
+void bookServices(Booking* booking, VacationPark& vp);
+}
+
+namespace employee{
+void accessAsEmployee(VacationPark& vp);
 }
 
 namespace general{

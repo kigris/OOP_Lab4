@@ -26,6 +26,7 @@ public:
     inline const int getSize() const {return m_Size;}
     inline const bool getBathroomWithBath() const {return m_BathroomWithBath;}
     inline const LuxuryLevel* getLuxuryLevel() const {return m_LuxuryLevel;}
+    inline const bool isReserved() const {return m_inUse;}
     
     // Setters
     bool setID(int id);
@@ -33,14 +34,14 @@ public:
     void setSize(int size);
     void setBathroomWithBath(bool bathroomWithBath);
     void setLuxuryLevel(LuxuryLevel* luxuryLevel);
+    inline void reserve(){m_inUse=true;}
+    inline void release(){m_inUse=false;}
     
     // Other functions
     virtual void toString()=0; // Pure virtual function
-    inline void incRefCount(){m_RefCount++;}
-    inline void decRefCount(){m_RefCount--;};
 private:
     static vector<int> g_IDs;
-    int m_RefCount{0};
+    bool m_inUse{false};
     int m_ID;
     int m_NumberPeople;
     int m_Size;

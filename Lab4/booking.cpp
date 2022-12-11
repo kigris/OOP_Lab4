@@ -8,42 +8,44 @@
 using std::string;
 #include "booking.hpp"
 
-vector<int> Booking::g_IDs = {};
+vector<string> Booking::g_IDs = {};
 
-Booking::Booking(int id, Customer* customer, bool activityPass, bool bicycleRent, bool swimmingPass){
+Booking::Booking(string id, Customer* customer, bool activityPass, bool bicycleRent, bool swimmingPass){
     if(!setID(id)){
         throw std::invalid_argument("Duplicate ID");
     }
     setCustomer(customer);
     setActivityPass(activityPass);
-    setBicycleRent(bicycleRent);
+    setBicycleRentPass(bicycleRent);
     setSwimmingPass(swimmingPass);
 };
 
-Booking::Booking(int id, Customer* customer, vector<Accomodation*> accomodations, bool activityPass, bool bicycleRent, bool swimmingPass){
+Booking::Booking(string id, Customer* customer, vector<Accomodation*> accomodations, bool activityPass, bool bicycleRent, bool swimmingPass){
     if(!setID(id)){
         throw std::invalid_argument("Duplicate ID");
     }
     setCustomer(customer);
     setAccomodations(accomodations);
     setActivityPass(activityPass);
-    setBicycleRent(bicycleRent);
+    setBicycleRentPass(bicycleRent);
     setSwimmingPass(swimmingPass);
 };
 
 Booking::~Booking(){
     // We remove the ID from the list of IDs used
     g_IDs.erase(remove(g_IDs.begin(), g_IDs.end(), m_ID), g_IDs.end());
-    // Delete accomodation
+    // Release all accomodations
     for(auto a : m_Accomodations)
-        delete a;
+        a->release();
 }
 
-bool Booking::setID(int id){
+bool Booking::setID(string id){
     // Check that the id is not taken
-    for(int i : g_IDs)
+    for(string i : g_IDs)
         if(i==id)
             return false;
+    // We remove the current one
+    g_IDs.erase(remove(g_IDs.begin(), g_IDs.end(), m_ID), g_IDs.end());
     // If the id given is not found
     m_ID = id;
     // We add the id given to the IDs taken
@@ -53,5 +55,6 @@ bool Booking::setID(int id){
 void Booking::setCustomer(Customer* customer) {m_Customer = customer;}
 void Booking::setAccomodations(vector<Accomodation*> accomodations) {m_Accomodations = accomodations;}
 void Booking::setActivityPass(bool activityPass){m_ActivityPass = activityPass;}
-void Booking::setBicycleRent(bool bicycleRent){m_BicyleRent = bicycleRent;}
+void Booking::setSportsPass(bool sportsPass){m_SportsPass=sportsPass;};
+void Booking::setBicycleRentPass(bool bicycleRent){m_BicyleRentPass = bicycleRent;}
 void Booking::setSwimmingPass(bool swimmingPass){m_SwimmingPass = swimmingPass;}

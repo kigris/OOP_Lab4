@@ -19,7 +19,8 @@ namespace menus{
 
 void displayCustomerMenu();
 void displayMainMenu();
-void displayCustomerLoginMenu(string name);
+int (&displayCustomerLoginMenu(string name))[2];
+int (&displayBookingMenu(string bookingID))[2];
 
 namespace owner{
 int (&displayOwnerMenu())[2];

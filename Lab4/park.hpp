@@ -33,7 +33,7 @@ private:
     static vector<string> g_Names;
     string m_Name;
     string m_Address;
-    Service* m_Service;
+    Service* m_Service {nullptr};
     vector<Accomodation*> m_Accomodations;
 };
 #endif /* park_hpp */

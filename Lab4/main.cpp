@@ -41,7 +41,7 @@ int main(int argc, const char * argv[]){
         menus::displayMainMenu();
         // Get user choice
         auto choice = getUserChoice(1, 5);
-        // Convert user choice to FileManagementOption enumerator
+        // Convert user choice to MainMenuOption enumerator
         MainMenuOption option = static_cast<MainMenuOption>(choice);
         // Process user choice
         switch (option) {
@@ -49,7 +49,7 @@ int main(int argc, const char * argv[]){
                 owner::accessAsOwner(vacationPark);
                 break;
             case MainMenuOption::ACCESS_AS_EMPLOYEE:
-//                accessAsEmployee();
+                employee::accessAsEmployee(vacationPark);
                 break;
             case MainMenuOption::ACCESS_AS_CUSTOMER:{
                 customer::accessAsCustomer(vacationPark);

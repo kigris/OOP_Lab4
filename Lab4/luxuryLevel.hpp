@@ -14,15 +14,15 @@ using std::string;
 class LuxuryLevel {
 public:
     LuxuryLevel(bool hasBBQ, bool hasSurroundSystem, bool hasBreakfastService, bool hasCleaningService, string hasAccomodationKind);
-    inline bool getBBQ() {return m_BBQ;}
+    inline bool getBBQ() const {return m_BBQ;}
     void setBBQ(bool has);
-    inline bool getSurroundSystem() {return m_SurroundSystem;}
+    inline bool getSurroundSystem() const {return m_SurroundSystem;}
     void setSurroundSystem(bool has);
-    inline bool getBreakfastService() {return m_BreakfastService;}
+    inline bool getBreakfastService() const {return m_BreakfastService;}
     void setBreakfastService(bool has);
-    inline bool getCleaningService() {return m_CleaningService;}
+    inline bool getCleaningService() const {return m_CleaningService;}
     void setCleaningService(bool has);
-    inline string getAccomodationKind() {return m_AccomodationKind;}
+    inline string getAccomodationKind() const {return m_AccomodationKind;}
     void setAccomodationKind(string accomodationKind);
 private:
     bool m_BBQ;
