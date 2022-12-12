@@ -21,6 +21,7 @@ void displayCustomerMenu();
 void displayMainMenu();
 int (&displayCustomerLoginMenu(string name))[2];
 int (&displayBookingMenu(string bookingID))[2];
+int (&displayEmployeeMenu())[2];
 
 namespace owner{
 int (&displayOwnerMenu())[2];

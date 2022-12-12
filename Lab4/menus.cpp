@@ -14,7 +14,7 @@ int (&displayCustomerLoginMenu(string name))[2] {
     cout << tabSpace() << tabSpace() << tabSpace() << tabSpace();
     cout << "Welcome " << name << "! What do you want to do?" << endl;
     cout << tabSpace() << tabSpace() << tabSpace() << tabSpace() << tabSpace();
-    cout << "1. Edit customer data" << endl;
+    cout << "1. Edit your data" << endl;
     cout << tabSpace() << tabSpace() << tabSpace() << tabSpace() << tabSpace();
     cout << "2. Create booking" << endl;
     cout << tabSpace() << tabSpace() << tabSpace() << tabSpace() << tabSpace();
@@ -24,6 +24,30 @@ int (&displayCustomerLoginMenu(string name))[2] {
     cout << tabSpace() << tabSpace() << tabSpace() << tabSpace() << tabSpace();
     cout << "Enter your choice: ";
     static int choicesRange[2]{1,4};
+    return choicesRange;
+}
+
+int (&displayEmployeeMenu())[2] {
+    cout << endl;
+    cout << tabSpace() << tabSpace() << tabSpace();
+    cout << "What do you want to do?" << endl;
+    cout << tabSpace() << tabSpace() << tabSpace() << tabSpace();
+    cout << "1. Create customer" << endl;
+    cout << tabSpace() << tabSpace() << tabSpace() << tabSpace();
+    cout << "2. Edit customer" << endl;
+    cout << tabSpace() << tabSpace() << tabSpace() << tabSpace();
+    cout << "3. Delete customer" << endl;
+    cout << tabSpace() << tabSpace() << tabSpace() << tabSpace();
+    cout << "4. Create booking" << endl;
+    cout << tabSpace() << tabSpace() << tabSpace() << tabSpace();
+    cout << "5. Change booking" << endl;
+    cout << tabSpace() << tabSpace() << tabSpace() << tabSpace();
+    cout << "6. Delete booking" << endl;
+    cout << tabSpace() << tabSpace() << tabSpace() << tabSpace();
+    cout << "7. Go back to main menu" << endl;
+    cout << tabSpace() << tabSpace() << tabSpace() << tabSpace();
+    cout << "Enter your choice: ";
+    static int choicesRange[2]{1,7};
     return choicesRange;
 }
 

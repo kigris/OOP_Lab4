@@ -18,8 +18,14 @@ Customer::Customer(string name, string address, string mail){
 }
 
 Customer::~Customer(){
+#ifdef DEBUG
+    std::cout<< "DEBUG: Destructor - Customer with name " << m_Name << ", before cleaning, g_Names size: " << g_Names.size() <<std::endl;
+#endif
     // We remove the name from the list of names used
     g_Names.erase(remove(g_Names.begin(), g_Names.end(), m_Name), g_Names.end());
+#ifdef DEBUG
+    std::cout<< "DEBUG: Destructor -  Customer with name " << m_Name << ", after cleaning, g_Names size: " << g_Names.size() <<std::endl;
+#endif
 }
 
 bool Customer::setName(string name){

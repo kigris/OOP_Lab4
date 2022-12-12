@@ -39,21 +39,6 @@ template <typename T> struct Value {
     T value;
 };
 
-namespace customerAPI{
-bool createCustomer(VacationPark& vp, string name, string address, string mail);
-bool findCustomer(vector<unique_ptr<Customer>>& customers, string customerName);
-bool findCustomer(vector<unique_ptr<Customer>>& customers, string customerName, Customer*& customer);
-bool updateCustomer(Customer*& customer, string name, string address, string mail);
-bool findBooking(vector<unique_ptr<Booking>>& bookings, string id);
-bool createBooking(VacationPark& vp, Customer* customer, Accomodation* accomodation, string id, bool activityPass, bool bicycleRent, bool swimmingPass);
-bool updateBooking(Booking* booking, Accomodation* accomodation);
-bool removeAccFromBooking(Booking* booking, Accomodation* accomodation);
-Park* getBookingPark(VacationPark& vp, Booking* booking);
-bool setBookingServices(Booking* booking, bool passes[4]);
-}
-
-
-
 namespace ownerAPI {
 enum class ACC_TYPE {
     HOTELROOM = 1,
@@ -72,6 +57,24 @@ bool findAccomodation(vector<unique_ptr<Park>>& parks, int id);
 bool createAccomodation(vector<Accomodation*>& accomodations, map<int,void*>* args, ACC_TYPE type);
 bool updateAccomodation(Accomodation* accomodation, map<int,void*>* args, ACC_TYPE type);
 bool deleteAccomodation(int parkIndex, int accomodationIndex, VacationPark& vp);
+}
+
+namespace customerAPI{
+bool createCustomer(VacationPark& vp, string name, string address, string mail);
+bool findCustomer(vector<unique_ptr<Customer>>& customers, string customerName);
+bool findCustomer(vector<unique_ptr<Customer>>& customers, string customerName, Customer*& customer);
+bool updateCustomer(Customer*& customer, string name, string address, string mail);
+bool findBooking(vector<unique_ptr<Booking>>& bookings, string id);
+bool createBooking(VacationPark& vp, Customer* customer, Accomodation* accomodation, string id, bool activityPass, bool bicycleRent, bool swimmingPass);
+bool updateBooking(Booking* booking, Accomodation* accomodation);
+bool removeAccFromBooking(Booking* booking, Accomodation* accomodation);
+Park* getBookingPark(VacationPark& vp, Booking* booking);
+bool setBookingServices(Booking* booking, bool passes[4]);
+}
+
+namespace employeeAPI {
+bool deleteCustomer(int index, VacationPark& vp);
+bool deleteBooking(int index, VacationPark& vp);
 }
 
 #endif /* vacationParkAPI_hpp */

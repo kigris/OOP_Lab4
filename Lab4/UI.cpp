@@ -474,34 +474,7 @@ void accessAsCustomer(VacationPark& vp) {
                 break;
             case 2:{
                 // The user chose to login
-                string username{};
-                Customer* customer = loginCustomer(username, vp);
-                
-                if (customer) {
-                    // The user logged in successfully
-                    while (true) {
-                        // Show the customer actions menu
-                        int(&choices)[2]{menus::displayCustomerLoginMenu(customer->getName())};
-                        // Get the user's choice
-                        int choice = getUserChoice(choices[0], choices[1]);
-                        // If choice is invalid
-                        if(choice == -1){
-                            cout<<"Invalid choice..."<<endl;
-                            waitForEnter();}
-                        if(choice==choices[1]) break; // User want to leave
-                        // Create a map of functions that will handle the user's choice
-                        std::map<int, std::function<void()>> funcChoices = {
-                            {1, [&]() { editCustomer(customer, vp); }},
-                            {2, [&]() { createBooking(vp, customer); }},
-                            {3, [&]() { editBookings(vp, customer); }},
-                        };
-                        // Handle the user's choice
-                        if (funcChoices.count(choice) > 0) {
-                            funcChoices[choice]();}
-                    }
-                } else {
-                    cout<<"Error: User not found..."<<endl;
-                    waitForEnter();}
+                loginCustomerMenu(vp);
                 break;}
             case 3:
                 // The user chose to go back
@@ -517,15 +490,46 @@ void accessAsCustomer(VacationPark& vp) {
 }
 
 
-void registerCustomer(VacationPark& vp){
+void registerCustomer(VacationPark& vp, bool employeeMode){
     string name, address, email;
-    bool hasCustomerDetails = getCustomerDetails(vp, name, address, email);
+    bool hasCustomerDetails = getCustomerDetails(vp, name, address, email, employeeMode);
     if(hasCustomerDetails){
         customerAPI::createCustomer(vp, name, address, email);
         // Print a success message
         cout << "Customer registered successfully" << endl;
         waitForEnter();
     }
+}
+
+void loginCustomerMenu(VacationPark& vp){
+    string username{};
+    Customer* customer = loginCustomer(username, vp);
+    
+    if (customer) {
+        // The user logged in successfully
+        while (true) {
+            // Show the customer actions menu
+            int(&choices)[2]{menus::displayCustomerLoginMenu(customer->getName())};
+            // Get the user's choice
+            int choice = getUserChoice(choices[0], choices[1]);
+            // If choice is invalid
+            if(choice == -1){
+                cout<<"Invalid choice..."<<endl;
+                waitForEnter();}
+            if(choice==choices[1]) return; // User want to leave
+            // Create a map of functions that will handle the user's choice
+            std::map<int, std::function<void()>> funcChoices = {
+                {1, [&]() { editCustomer(customer, vp); }},
+                {2, [&]() { createBooking(vp, customer); }},
+                {3, [&]() { editBookings(vp, customer); }},
+            };
+            // Handle the user's choice
+            if (funcChoices.count(choice) > 0) {
+                funcChoices[choice]();}
+        }
+    } else {
+        cout<<"Error: User not found..."<<endl;
+        waitForEnter();}
 }
 
 
@@ -552,9 +556,9 @@ Customer* loginCustomer(string& username, VacationPark& vp) {
 }
 
 
-void editCustomer(Customer*& customer, VacationPark& vp) {
+void editCustomer(Customer*& customer, VacationPark& vp, bool employeeMode) {
     string name, address, email;
-    bool hasCustomerDetails = getCustomerDetails(vp, name, address, email);
+    bool hasCustomerDetails = getCustomerDetails(vp, name, address, email, employeeMode);
     if(hasCustomerDetails && customerAPI::updateCustomer(customer, name, address, email)){
         // Print a success message
         cout << "Customer edited successfully" << endl;
@@ -563,18 +567,16 @@ void editCustomer(Customer*& customer, VacationPark& vp) {
 }
 
 
-bool getCustomerDetails(VacationPark& vp,string& name, string& address, string& email){
-    // Ask the customer for his user name
-    cout << "Enter your name: ";
+bool getCustomerDetails(VacationPark& vp,string& name, string& address, string& email, bool employeeMode){
+    // Display appropiate message if employee mode
+    employeeMode? cout << "Enter the name: ":cout << "Enter your name: ";
     getline(cin, name);
     
     // Use regex to validate name
-    if (!regex_match(name, nameRegex))
-    {
+    if (!regex_match(name, nameRegex)){
         cout << "Invalid name" << endl;
         waitForEnter();
-        return false;
-    }
+        return false;}
     
     // Check for duplicated name
     bool isDuplicated = customerAPI::findCustomer(vp.getCustomers(), name);
@@ -583,11 +585,10 @@ bool getCustomerDetails(VacationPark& vp,string& name, string& address, string& 
         waitForEnter();
         return false;
     }
-    
-    // Ask the customer for his address
-    cout << "Enter your address: ";
+
+    employeeMode? cout << "Enter the address: ":cout << "Enter your address: ";
+
     getline(cin, address);
-    
     // Use regex to validate address
     if (!regex_match(address, addressRegex))
     {
@@ -596,8 +597,8 @@ bool getCustomerDetails(VacationPark& vp,string& name, string& address, string& 
         return false;
     }
     
-    // Ask the customer for his address
-    cout << "Enter your email: ";
+    // If a employee is creating this account
+    employeeMode? cout << "Enter the email: ":cout << "Enter your email: ";
     getline(cin, email);
     
     // Use regex to validate email
@@ -612,7 +613,7 @@ bool getCustomerDetails(VacationPark& vp,string& name, string& address, string& 
     return true;
 }
 
-void createBooking(VacationPark& vp, Customer* customer) {
+void createBooking(VacationPark& vp, Customer* customer, bool employeeMode) {
     if(!owner::existParks(vp)) return;
     if(!owner::existAccomodations(vp)) return;
     
@@ -628,19 +629,21 @@ void createBooking(VacationPark& vp, Customer* customer) {
     
     // Create the booking without any services
     bool isCreated = customerAPI::createBooking(vp, customer, accomodation, id, false, false, false);
-    isCreated ? cout<<"Your new booking with ID "<< id << " was created successfully!" << endl:
-    cout<<"There was an error trying to create your booking...";
+    string pronoun = employeeMode ? "The": "Your";
+    isCreated ? cout<<pronoun<<" new booking with ID "<< id << " was created successfully!" << endl:
+    cout<<"There was an error trying to create" << convToLower(pronoun) << " booking...";
     waitForEnter();
 }
 
-Accomodation* getAccomodationFiltered(VacationPark& vp, Park* park, Booking* booking){
+Accomodation* getAccomodationFiltered(VacationPark& vp, Park* park, Booking* booking, bool employeeMode){
     if(park!=nullptr){
         cout<< "INFO: There are " << booking->getAccomodations().size() << " accomodations booked. " <<endl;
         cout<< "Limiting filter to accomodations of park "<<park->getName()<<"..."<<endl;}
     cout<<"---Accomodation filter---"<<
     endl<<"Enter the type of the accomodation: "<<endl
-    << "1. HotelRoom"<<endl<<"2. Cabin"<<endl<<
-    "Enter your choice: ";
+    << "1. HotelRoom"<<endl<<"2. Cabin"<<endl;
+    // If an employee is accessing this function
+    employeeMode ? cout<<"Enter the choice: " : cout<<"Enter your choice: ";
     int typeAccomodation = getUserChoice(1,2);
     if(typeAccomodation==-1){
         cout<<"Invalid answer..."<<endl;
@@ -663,11 +666,13 @@ Accomodation* getAccomodationFiltered(VacationPark& vp, Park* park, Booking* boo
     filterArgs->emplace(1, new Value<int>{typeAccomodation});
     map<int, tuple<Accomodation*, Park*>>* accFiltered = filterAccomodations(filterArgs, vp, park);
     if(accFiltered->empty()){
+        employeeMode ? cout<<"No accomodations have match the filters provided..."<<endl:
         cout<<"No accomodations have match your filters..."<<endl;
         waitForEnter();
         return nullptr;}
     
-    cout<<"\nHere are the accomodations that matched your filters: "<<endl;
+    employeeMode ? cout<<"\nHere are the accomodations that matched the filters provided"<<endl :
+    cout<<"\nHere are the accomodations that matched your filters"<<endl;
     // Display the filtered accomodations
     string typeAccStr{ (typeAccomodation==1) ? "hotel room":"cabin" };
     map<int, tuple<Accomodation*, Park*>>::iterator it = accFiltered->begin();
@@ -678,7 +683,7 @@ Accomodation* getAccomodationFiltered(VacationPark& vp, Park* park, Booking* boo
         ") with ID " << accomodation->getId() << " from park " << park->getName() << endl;
         ++it;
     }
-    cout<<"Select your choice: ";
+    employeeMode ? cout<<"Enter the choice: " : cout<<"Enter your choice: ";
     
     int choice = getUserChoice(1, (int)accFiltered->size());
     if(choice==-1){
@@ -689,7 +694,7 @@ Accomodation* getAccomodationFiltered(VacationPark& vp, Park* park, Booking* boo
     return get<0>(accFiltered->at(choice));
 }
 
-void editBookings(VacationPark& vp, Customer* customer){
+void editBookings(VacationPark& vp, Customer* customer, bool employeeMode){
     if(!existBookings(vp, customer)) return;
     
     Booking* booking = getBookings(vp, customer, "\n---Select the booking to edit--- ");
@@ -704,9 +709,9 @@ void editBookings(VacationPark& vp, Customer* customer){
         if(choice==choices[1]) break; // User want to leave
         // Create a map of functions that will handle the user's choice
         std::map<int, std::function<void()>> funcChoices = {
-            {1, [&]() { addAccomodation(booking, vp); }},
-            {2, [&]() { removeAccomodation(booking, vp); }},
-            {3, [&]() { bookServices(booking, vp); }},
+            {1, [&]() { addAccomodation(booking, vp, employeeMode); }},
+            {2, [&]() { removeAccomodation(booking, vp, employeeMode); }},
+            {3, [&]() { bookServices(booking, vp, employeeMode); }},
         };
         
         // Handle the user's choice
@@ -714,7 +719,7 @@ void editBookings(VacationPark& vp, Customer* customer){
             funcChoices[choice]();}
 }
 
-void addAccomodation(Booking* booking, VacationPark& vp){
+void addAccomodation(Booking* booking, VacationPark& vp, bool employeeMode){
     if(booking->getAccomodations().size()==3){
         cout << "Error: This booking has reached the maximun number of 3 accomodations booked."<<endl;
         waitForEnter();
@@ -722,7 +727,7 @@ void addAccomodation(Booking* booking, VacationPark& vp){
     // If there are no accomodations booked
     if(booking->getAccomodations().size()==0){
         // Do not restrict the accomodations to a park
-        Accomodation* accomodation = getAccomodationFiltered(vp);
+        Accomodation* accomodation = getAccomodationFiltered(vp, nullptr, nullptr, employeeMode);
         if(accomodation==nullptr)
             return;
         // Update the booking with the new accomodation
@@ -732,11 +737,11 @@ void addAccomodation(Booking* booking, VacationPark& vp){
     else{ // Otherwise
         // Restrict the accomodations to the park of the other accomodations
         Park* park{customerAPI::getBookingPark(vp, booking)};
-#if DEBUG
+#ifdef DEBUG
         // Park cannot be null, because an accomodation must belong to a park
         assert(park!=nullptr);
 #endif
-        Accomodation* accomodation = getAccomodationFiltered(vp, park, booking);
+        Accomodation* accomodation = getAccomodationFiltered(vp, park, booking, employeeMode);
         if(accomodation==nullptr) return;
         // Update the booking with the new accomodation
         bool isUpdated = customerAPI::updateBooking(booking, accomodation);
@@ -745,7 +750,7 @@ void addAccomodation(Booking* booking, VacationPark& vp){
     waitForEnter();
 }
 
-void removeAccomodation(Booking* booking, VacationPark& vp){
+void removeAccomodation(Booking* booking, VacationPark& vp, bool employeeMode){
     if(booking->getAccomodations().empty()){
         cout << "Error: This booking has no accomodations booked."<<endl;
         waitForEnter();
@@ -757,6 +762,7 @@ void removeAccomodation(Booking* booking, VacationPark& vp){
         typeAccomodation = (typeid(HotelRoom)==typeid(*a))?"hotel room":"cabin";
         cout<<accSize<<". Accomodation ("<<typeAccomodation<<") with ID "<<a->getId()<<endl;
         accSize++;}
+    employeeMode?cout<<"Select the accomodation to remove: ":
     cout<<"Select the accomodation you want to remove: ";
     int choice = getUserChoice(1, accSize);
     if(choice==-1){
@@ -783,7 +789,7 @@ bool existBookings(VacationPark& vp, Customer* customer){
     return true;
 }
 
-Booking* getBookings(VacationPark& vp, Customer* customer, string displayText) {
+Booking* getBookings(VacationPark& vp, Customer* customer, string displayText, int* index) {
     cout << displayText << endl;
     vector<Booking*> customerBookings{};
     int bookingCount{1};
@@ -801,6 +807,7 @@ Booking* getBookings(VacationPark& vp, Customer* customer, string displayText) {
         waitForEnter();
         return nullptr;}
     
+    if(index!=nullptr) *index = choice-1;
     return customerBookings.at(choice-1);
 }
 
@@ -858,10 +865,13 @@ string generateBookingID(Customer* customer){
 }
 
 
-void bookServices(Booking* booking, VacationPark& vp){
+void bookServices(Booking* booking, VacationPark& vp, bool employeeMode){
     if(booking->getAccomodations().empty()){
-        cout<<"Error: This booking is empty!"<<endl<<
-        "You must book at least one accomodation in order to be able to book services."<<endl;
+        cout<<"Error: This booking is empty!"<<endl;
+        employeeMode?
+                cout<<"It is needed to book at least one accomodation in order to be able to book services."<<endl:
+                cout<<"You must book at least one accomodation in order to be able to book services."<<endl;
+        waitForEnter();
         return;}
     Park* p = customerAPI::getBookingPark(vp, booking);
     bool hasSSP = p->getService()->getSubtropicSwimmingPool();
@@ -878,8 +888,9 @@ void bookServices(Booking* booking, VacationPark& vp){
     cout<<tabSpace()<<"Bicycle rent (bicycle rent pass service): "<< (hasBR ? "yes":"no") << endl;
     cout<<tabSpace()<<"Children paradise (activity rent pass): "<< (hasCP ? "yes":"no") << endl;
     cout<<tabSpace()<<"Water bikes (activity pass): "<< (hasWB ? "yes":"no") << endl;
-
-    cout<< "Now you can decide which services, of those that the park has, you want." <<endl;
+    
+    employeeMode?   cout<< "Now it can be decided which services, of those that the park has, it is wanted." <<endl:
+                    cout<< "Now you can decide which services, of those that the park has, you want." <<endl;
     cout<< "NOTICE: Answer with 0 if no and with 1 if yes." <<endl;
     waitForEnter();
     bool passes[4]{false};
@@ -887,29 +898,33 @@ void bookServices(Booking* booking, VacationPark& vp){
     if(hasSSP){
         cout<<"Book swimming pass service? ";
         choice = getUserChoice(0, 1);
-        if(choice==-1)
-        {cout<<"Invalid answer..."<<endl;
+        if(choice==-1){
+            cout<<"Invalid answer..."<<endl;
+            waitForEnter();
             return;}
         passes[0]=choice;}
     if(hasSI){
         cout<<"Book sports pass service? ";
         choice = getUserChoice(0, 1);
-        if(choice==-1)
-        {cout<<"Invalid answer..."<<endl;
+        if(choice==-1){
+            cout<<"Invalid answer..."<<endl;
+            waitForEnter();
             return;}
         passes[1]=choice;}
     if(hasBA || hasWB || hasCP){
         cout<<"Book activity pass service? ";
         choice = getUserChoice(0, 1);
-        if(choice==-1)
-        {cout<<"Invalid answer..."<<endl;
+        if(choice==-1){
+            cout<<"Invalid answer..."<<endl;
+            waitForEnter();
             return;}
         passes[2]=choice;}
     if(hasBR){
         cout<<"Book bicycle rent pass service? ";
         choice = getUserChoice(0, 1);
-        if(choice==-1)
-        {cout<<"Invalid answer..."<<endl;
+        if(choice==-1){
+            cout<<"Invalid answer..."<<endl;
+            waitForEnter();
             return;}
         passes[3]=choice;}
     
@@ -924,6 +939,127 @@ void bookServices(Booking* booking, VacationPark& vp){
 /// Customer namespace end
 /// Customer namespace end
 }
+
+
+namespace employee{
+/// Employee namespace begin
+/// Employee namespace begin
+/// Employee namespace begin
+
+
+void accessAsEmployee(VacationPark& vp){
+    while (true) {
+        // Show the customer actions menu
+        int(&choices)[2]{menus::displayEmployeeMenu()};
+        // Get the user's choice
+        int choice = getUserChoice(choices[0], choices[1]);
+        // If choice is invalid
+        if(choice == -1){
+            cout<<"Invalid choice..."<<endl;
+            waitForEnter();}
+        if(choice==choices[1]) break; // User want to leave
+        // Create a map of functions that will handle the user's choice
+        std::map<int, std::function<void()>> funcChoices = {
+            {1, [&]() { customer::registerCustomer(vp, true); }},
+            {2, [&]() { editCustomer(vp); }},
+            {3, [&]() { deleteCustomer(vp); }},
+            {4, [&]() { createBooking(vp); }},
+            {5, [&]() { editBooking(vp); }},
+            {6, [&]() { deleteBooking(vp); }},
+        };
+        // Handle the user's choice
+        if (funcChoices.count(choice) > 0) {
+            funcChoices[choice]();}
+    }
+}
+
+
+Customer* getCustomer(VacationPark& vp, string displayText, int* index){
+    cout<<displayText<<endl;
+    int customerCount{1};
+    // Show all the customers
+    for(auto& c : vp.getCustomers()){
+        cout<<tabSpace()<<customerCount<<". "<< c->getName() <<endl;
+        customerCount++;
+    }
+    cout<<"Enter your selection: ";
+    int choice = getUserChoice(1, customerCount);
+    if(choice==-1){
+        cout<<"Error: Invalid selection..."<<endl;
+        return nullptr;}
+    // If the index is wanted
+    if(index!=nullptr)
+        *index = choice-1;
+    return vp.getCustomers()[choice-1].get();
+}
+
+void editCustomer(VacationPark& vp){
+    if(vp.getCustomers().empty()){
+        cout<<"There are no customers created..."<<endl;
+        waitForEnter();
+        return;}
+    Customer* customer = getCustomer(vp, "These are all customers");
+    if(customer==nullptr) return;
+    customer::editCustomer(customer, vp, true);
+}
+
+void deleteCustomer(VacationPark& vp){
+    if(vp.getCustomers().empty()){
+        cout<<"There are no customers created..."<<endl;
+        waitForEnter();
+        return;}
+    int index{0};
+    Customer* customer = getCustomer(vp, "These are all customers", &index);
+    if(customer==nullptr) return;
+    bool wasDeleted = employeeAPI::deleteCustomer(index, vp);
+    wasDeleted ? cout<<"Customer deleted successfully!"<<endl :
+    cout<<"Error: Customer cannot be deleted because it has accomodations booked..."<<endl;
+    waitForEnter();
+}
+
+void createBooking(VacationPark& vp){
+    if(vp.getCustomers().empty()){
+        cout<<"There are no customers created..."<<endl;
+        waitForEnter();
+        return;}
+    Customer* customer = getCustomer(vp, "Select the customer to creake the booking for");
+    if(customer==nullptr) return;
+    
+    customer::createBooking(vp, customer, true);
+}
+
+void editBooking(VacationPark& vp){
+    if(vp.getBookings().empty()){
+        cout<<"There are no bookings created..."<<endl;
+        waitForEnter();
+        return;}
+    Customer* customer = getCustomer(vp, "Select the customer to edit the booking for");
+    if(customer==nullptr) return;
+    
+    customer::editBookings(vp, customer, true);
+}
+
+void deleteBooking(VacationPark& vp){
+    if(vp.getBookings().empty()){
+        cout<<"There are no bookings created..."<<endl;
+        waitForEnter();
+        return;}
+    Customer* customer = getCustomer(vp, "Select the customer to delete the booking for");
+    if(customer==nullptr) return;
+    int index {-1};
+    Booking* booking = customer::getBookings(vp, customer, "\n---Select the booking to delete--- ", &index);
+    if(booking==nullptr) return; // Check that user got a booking to edit
+    bool isDeleted = employeeAPI::deleteBooking(index, vp);
+    isDeleted?  cout<<"Booking deleted successfully!"<<endl:
+                cout<<"There was an error..."<<endl;
+    waitForEnter();
+}
+
+/// Employee namespace end
+/// Employee namespace end
+/// Employee namespace end
+}
+
 
 namespace general{
 /// General namespace begin

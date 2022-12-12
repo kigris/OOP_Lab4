@@ -8,6 +8,10 @@
 #ifndef customer_hpp
 #define customer_hpp
 
+#ifdef DEBUG
+#include <iostream>
+#endif
+
 #include <stdio.h>
 #include <string>
 #include <vector>

@@ -32,11 +32,22 @@ Booking::Booking(string id, Customer* customer, vector<Accomodation*> accomodati
 };
 
 Booking::~Booking(){
+#ifdef DEBUG
+    std::cout<< "DEBUG: Destructor - Booking with ID " << m_ID << ", before cleaning, g_IDs size: " << g_IDs.size() <<std::endl;
+#endif
     // We remove the ID from the list of IDs used
     g_IDs.erase(remove(g_IDs.begin(), g_IDs.end(), m_ID), g_IDs.end());
     // Release all accomodations
-    for(auto a : m_Accomodations)
+    for(auto a : m_Accomodations){
+#ifdef DEBUG
+        std::cout<< "DEBUG: Destructor - Booking with ID "<< m_ID <<
+        ", releasing accomodation " << a->getId()<<std::endl;
+#endif
         a->release();
+    }
+#ifdef DEBUG
+    std::cout<< "DEBUG: Destructor - Booking with ID " << m_ID << ", after cleaning, g_IDs size: " << g_IDs.size() <<std::endl;
+#endif
 }
 
 bool Booking::setID(string id){

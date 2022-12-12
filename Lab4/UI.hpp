@@ -41,23 +41,30 @@ bool existParks(VacationPark& vp);
 namespace customer{
 void accessAsCustomer(VacationPark& vp);
 Customer* loginCustomer(string& username, VacationPark& vp);
-void registerCustomer(VacationPark& vp);
-bool getCustomerDetails(VacationPark& vp,string& name, string& address, string& email);
-void editCustomer(Customer*& customer, VacationPark& vp);
-void createBooking(VacationPark& vp, Customer* customer);
+void registerCustomer(VacationPark& vp, bool employeeMode=false);
+bool getCustomerDetails(VacationPark& vp,string& name, string& address, string& email, bool employeeMode=false);
+void editCustomer(Customer*& customer, VacationPark& vp, bool employeeMode=false);
+void createBooking(VacationPark& vp, Customer* customer, bool employeeMode=false);
 map<int, tuple<Accomodation*, Park*>>* filterAccomodations(map<int, void*>* args, VacationPark& vp, Park* park=nullptr);
 string generateBookingID(Customer* customer);
-void editBookings(VacationPark& vp, Customer* customer);
+void editBookings(VacationPark& vp, Customer* customer, bool employeeMode=false);
 bool existBookings(VacationPark& vp, Customer* customer);
-Booking* getBookings(VacationPark& vp, Customer* customer, string displayText);
-void addAccomodation(Booking* booking, VacationPark& vp);
-void removeAccomodation(Booking* booking, VacationPark& vp);
-Accomodation* getAccomodationFiltered(VacationPark& vp, Park* p=nullptr, Booking* booking=nullptr);
-void bookServices(Booking* booking, VacationPark& vp);
+Booking* getBookings(VacationPark& vp, Customer* customer, string displayText, int* index=nullptr);
+void addAccomodation(Booking* booking, VacationPark& vp, bool employeeMode=false);
+void removeAccomodation(Booking* booking, VacationPark& vp, bool employeeMode=false);
+Accomodation* getAccomodationFiltered(VacationPark& vp, Park* p=nullptr, Booking* booking=nullptr, bool employeeMode=false);
+void bookServices(Booking* booking, VacationPark& vp, bool employeeMode=false);
+void loginCustomerMenu(VacationPark& vp);
 }
 
 namespace employee{
 void accessAsEmployee(VacationPark& vp);
+Customer* getCustomer(VacationPark& vp, string displayText, int* index=nullptr);
+void editCustomer(VacationPark& vp);
+void deleteCustomer(VacationPark& vp);
+void createBooking(VacationPark& vp);
+void editBooking(VacationPark& vp);
+void deleteBooking(VacationPark& vp);
 }
 
 namespace general{

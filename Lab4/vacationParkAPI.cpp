@@ -332,3 +332,37 @@ bool setBookingServices(Booking* booking, bool passes[4]){
 /// customerAPI namespace end
 /// customerAPI namespace end
 }
+
+
+namespace employeeAPI {
+/// employeeAPI namespace begin
+/// employeeAPI namespace begin
+/// employeeAPI namespace begin
+
+bool deleteCustomer(int index, VacationPark& vp){
+    Customer* customer = vp.getCustomers()[index].get();
+    // Check if the customer has booked accomodations
+    for(auto const& b : vp.getBookings())
+        if(b->getCustomer()->getName() == customer->getName())
+            return false;
+    // If not, it can be deleted
+    vp.getCustomers().erase(vp.getCustomers().begin()+index);
+    return true;
+}
+
+bool deleteBooking(int index, VacationPark& vp){
+    auto& bookings = vp.getBookings();
+    try{
+        // Try to delete the booking
+        bookings.erase(bookings.begin()+index);
+    }
+    catch(...){
+        return false;}
+    return true;
+}
+
+
+/// employeeAPI namespace end
+/// employeeAPI namespace end
+/// employeeAPI namespace end
+}
