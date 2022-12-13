@@ -13,9 +13,16 @@ bool storeCurrentInformation(VacationPark& vp, string& name) {
     string timeStamp = to_string(time(nullptr));
     name = timeStamp;
     const string saveFolder = parentFolderName+"/"+timeStamp;
-    int result = mkdir(saveFolder.c_str(), 0777);
-    if(result!=0)
-        cerr<<"There was an error trying to create the folder"<<endl;
+    // Check if the directory exists
+      if(!std::filesystem::exists(saveFolder.c_str())) {
+        try {
+          // Try to create the directory
+          std::filesystem::create_directories(saveFolder.c_str());
+        } catch (const std::filesystem::filesystem_error& ex) {
+          std::cerr << "File Management: Failed to create save directory: " << ex.what() << "\n";
+        }
+      }
+
     string customersFN = saveFolder+"/customers.dat";
     
     // Open file for writing
