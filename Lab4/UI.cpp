@@ -1159,6 +1159,7 @@ string& getSaveName(int* countSaves){
     }
     // Show the list of files
     cout << "---Saves list---" << endl;
+    cout << "----Sorted from most recent to least recent-----" << endl;
     for (int i = 0; i < saves.size(); i++) {
         cout << tabSpace() << i + 1 << ". " << saves[i] << endl;}
     cout<<"Enter your choice: ";

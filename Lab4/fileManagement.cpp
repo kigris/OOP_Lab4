@@ -64,7 +64,7 @@ bool storeCurrentInformation(VacationPark& vp, string& name) {
                 // Get and write type of accomodation
                 int typeAcc = (typeid(HotelRoom)==typeid(*a)) ? 0 : 1;
                 accomodationsFS<<typeAcc<<endl;
-                accomodationsFS<<a->getId()<<","<<a->getSize()<<","<<a->getNumberPeople()<<","<<
+                accomodationsFS<<a->getId()<<","<<a->isReserved()<<","<<a->getSize()<<","<<a->getNumberPeople()<<","<<
                 a->getBathroomWithBath()<<",";
                 // Write either Hotel or Cabin
                 (typeAcc==0)?
@@ -160,7 +160,9 @@ bool loadData(VacationPark& vp, string fileSave){
     ifstream luxuryLevelFS{luxuryLevelFN, ios::in|ios::binary};
     ifstream accomodationsFS{accomodationsFN, ios::in};
     if(parksFS.is_open()){
-        // Clear the parks first
+        // Clear the bookings first
+        vp.getBookings().clear();
+        // Then the parks
         vp.getParks().clear();
         // Read the size first
         string parkLine;
@@ -181,8 +183,10 @@ bool loadData(VacationPark& vp, string fileSave){
                 getline(accomodationsFS, accLine);
                 stringstream accLineSs(accLine);
                 int id, size, numberOfPeople;
-                bool bathroomWithBath;
+                bool isReserved, bathroomWithBath;
                 accLineSs>>id;
+                accLineSs.ignore();
+                accLineSs>>isReserved;
                 accLineSs.ignore();
                 accLineSs>>size;
                 accLineSs.ignore();
@@ -214,6 +218,7 @@ bool loadData(VacationPark& vp, string fileSave){
                     accLineSs.ignore();
                     acc = new Cabin(id, size, numberOfPeople, bathroomWithBath, luxuryLevel, bedrooms);
                 }
+                if(isReserved) acc->reserve();
                 accomodations.emplace_back(acc);
             }
             Service* service = new Service();
@@ -228,7 +233,6 @@ bool loadData(VacationPark& vp, string fileSave){
     string bookingsFN{"data/"+fileSave+"/bookings.txt"};
     ifstream bookingsFS{bookingsFN, ios::out};
     if(bookingsFS.is_open()){
-        vp.getBookings().clear();
         string bookLine;
         getline(bookingsFS, bookLine); // Read size of bookings
         size_t bookingsSize = (size_t)atoi(bookLine.c_str());
@@ -348,6 +352,7 @@ vector<string> getSaveNames(){
     } else {
         cout<<"Error: Directory "<<dir_name<<" not found"<<endl;
     }
+    sort(files.begin(), files.end(), greater<>());
     return files;
 }
 
