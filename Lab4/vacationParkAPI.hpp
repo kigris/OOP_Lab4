@@ -54,6 +54,7 @@ bool deletePark(int index, VacationPark& vp);
 Park* getPark(VacationPark& vp, int index);
 Accomodation* getAccomodation(VacationPark& vp, int parkIndex, int accomodationIndex);
 bool findAccomodation(vector<unique_ptr<Park>>& parks, int id);
+bool findAccomodation(vector<unique_ptr<Park>>& parks, int id, Accomodation*& accomodation);
 bool createAccomodation(vector<Accomodation*>& accomodations, map<int,void*>* args, ACC_TYPE type);
 bool updateAccomodation(Accomodation* accomodation, map<int,void*>* args, ACC_TYPE type);
 bool deleteAccomodation(int parkIndex, int accomodationIndex, VacationPark& vp);

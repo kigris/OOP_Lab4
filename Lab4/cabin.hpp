@@ -14,6 +14,7 @@
 class Cabin : public Accomodation {
 public:
     // Constructor
+    Cabin()=default;
     Cabin(int id, int size, int numberPeople, bool bathroomWithBath, LuxuryLevel* luxuryLevel, int bedrooms);
     
     // Getter

@@ -36,6 +36,8 @@ public:
     void setLuxuryLevel(LuxuryLevel* luxuryLevel);
     inline void reserve(){m_inUse=true;}
     inline void release(){m_inUse=false;}
+    inline static vector<int>& getGlobalIDs(){return g_IDs;}
+    inline static void setGlobalIDs(vector<int>& ids){g_IDs=ids;}
     
     // Other functions
     virtual void toString()=0; // Pure virtual function

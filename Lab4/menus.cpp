@@ -9,6 +9,17 @@
 
 namespace menus{
 
+int (&displayFileManagementMenu())[2]{
+    cout << endl <<"Want you want to do?"<<endl;
+    cout << tabSpace() << "1. Store current data"<<endl;
+    cout << tabSpace() << "2. Load data"<<endl;
+    cout << tabSpace() << "3. Delete data"<<endl;
+    cout << tabSpace() << "4. Exit"<<endl;
+    cout << tabSpace() << "Enter your choice: ";
+    static int choicesRange[2]{1,4};
+    return choicesRange;
+}
+
 int (&displayCustomerLoginMenu(string name))[2] {
     cout << endl;
     cout << tabSpace() << tabSpace() << tabSpace() << tabSpace();

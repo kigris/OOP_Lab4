@@ -21,6 +21,19 @@ bool findAccomodation(vector<unique_ptr<Park>>& parks, int id){
     return false;
 }
 
+bool findAccomodation(vector<unique_ptr<Park>>& parks, int id, Accomodation*& accomodation){
+    // Look over all the parks
+    for(auto const& p : parks)
+        // Look over all the accomodations of a park
+        for(auto const& a : p->getAcccomodations())
+            if(a->getId() == id){
+                accomodation = a;
+                return true;
+            }
+    accomodation = nullptr;
+    return false;
+}
+
 bool findPark(vector<unique_ptr<Park>>& parks, string parkName){
     for(auto const& p : parks)
         if(convToLower(p->getName()) == convToLower(parkName))
@@ -228,6 +241,7 @@ bool findCustomer(vector<unique_ptr<Customer>>& customers, string customerName, 
             customer = c.get();
             return true;
         }
+    customer=nullptr;
     return false;
 }
 

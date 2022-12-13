@@ -16,10 +16,11 @@
 #include <string>
 #include <vector>
 using std::vector;
-
 using std::string;
+
 class Customer{
 public:
+    Customer()=default;
     Customer(string name, string address, string mail);
     ~Customer();
     inline string getName() {return m_Name;}
@@ -28,6 +29,8 @@ public:
     void setAddress(string address);
     inline string getMail() {return m_Mail;}
     void setMail(string mail);
+    inline static vector<string>& getGlobalNames(){return g_Names;}
+    inline static void setGlobalNames(vector<string>& names){g_Names=names;}
 private:
     static vector<string> g_Names;
     string m_Name;

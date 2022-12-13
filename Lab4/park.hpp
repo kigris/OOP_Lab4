@@ -13,11 +13,14 @@
 #include "service.hpp"
 #include "accomodation.hpp"
 #include <vector>
+#include "hotelRoom.hpp"
+#include <algorithm>
 using std::string;
 using std::vector;
 
 class Park{
 public:
+    Park()=default;
     Park(string name, string address, Service* service);
     Park(string name, string address, Service* services, vector<Accomodation*> accomodations);
     ~Park();
@@ -29,11 +32,13 @@ public:
     void setService(Service* service);
     inline vector<Accomodation*>& getAcccomodations() {return m_Accomodations;}
     void setAcccomodations(vector<Accomodation*> accomodations);
+    inline static vector<string>& getGlobalNames(){return g_Names;}
+    inline static void setGlobalNames(vector<string>& names){g_Names=names;}
 private:
     static vector<string> g_Names;
     string m_Name;
     string m_Address;
     Service* m_Service {nullptr};
-    vector<Accomodation*> m_Accomodations;
+    vector<Accomodation*> m_Accomodations{};
 };
 #endif /* park_hpp */

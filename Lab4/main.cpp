@@ -12,24 +12,8 @@
 #include "menus.hpp"
 #include "UI.hpp"
 #include "unitTesting.hpp"
+#include "fileManagement.hpp"
 using namespace std;
-
-// Enumeration for main menu options
-enum class MainMenuOption {
-    ACCESS_AS_OWNER = 1,
-    ACCESS_AS_EMPLOYEE = 2,
-    ACCESS_AS_CUSTOMER = 3,
-    FILE_MANAGEMENT = 4,
-    EXIT = 5
-};
-
-// Enumeration for file management menu options
-enum class FileManagementOption {
-    STORE_CURRENT_INFORMATION = 1,
-    LOAD_INFORMATION = 2,
-    EXIT = 3
-};
-
 
 int main(int argc, const char * argv[]){
     VacationPark vacationPark("Wonderland Park", "Avenue 52, 1020, Oklahoma, US");
@@ -40,7 +24,7 @@ int main(int argc, const char * argv[]){
         // Display main menu
         menus::displayMainMenu();
         // Get user choice
-        auto choice = getUserChoice(1, 5);
+        auto choice = getUserChoice(1, 6);
         // Convert user choice to MainMenuOption enumerator
         MainMenuOption option = static_cast<MainMenuOption>(choice);
         // Process user choice
@@ -56,7 +40,7 @@ int main(int argc, const char * argv[]){
             }
                 break;
             case MainMenuOption::FILE_MANAGEMENT:
-//                fileManagement();
+                fileMngmt::fileManagement(vacationPark);
                 break;
             case MainMenuOption::EXIT:
                 exit = true;

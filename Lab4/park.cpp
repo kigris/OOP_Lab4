@@ -24,22 +24,36 @@ Park::Park(string name, string address, Service* service){
 };
 
 Park::Park(string name, string address, Service* service, vector<Accomodation*> accomodations){
+#ifdef DEBUG
+    std::cout<<"DEBUG: Constructor - Park with name "<< m_Name << ", before atempting, g_Names size: " << g_Names.size() <<std::endl;
+#endif
     if(!setName(name)){
         throw std::invalid_argument("Duplicate name");
     }
     setAddress(address);
     setService(service);
     setAcccomodations(accomodations);
+#ifdef DEBUG
+    std::cout<<"DEBUG: Constructor - Park with name "<< m_Name << ", after atempting, g_Names size: " << g_Names.size() <<std::endl;
+#endif
 }
 
 Park::~Park(){
+#ifdef DEBUG
+    std::cout<<"DEBUG: Destructor - Park with name "<< m_Name << ", before cleaning, g_Names size: " << g_Names.size() <<std::endl;
+#endif
     // We remove the name from the list of names used
     g_Names.erase(remove(g_Names.begin(), g_Names.end(), m_Name), g_Names.end());
     // Delete accomodations
-    for(auto a : m_Accomodations)
-        delete a;
-    // Free up the service
-    delete m_Service;
+    if(!m_Accomodations.empty())
+        for(auto a : m_Accomodations)
+            delete a;
+    if(m_Service!=nullptr)
+        // Free up the service
+        delete m_Service;
+#ifdef DEBUG
+    std::cout<<"DEBUG: Destructor - Park with name "<< m_Name << ", after cleaning, g_Names size: " << g_Names.size() <<std::endl;
+#endif
 }
 
 bool Park::setName(string name) {
@@ -73,10 +87,10 @@ void Park::setService(Service* service){
 
 void Park::setAcccomodations(vector<Accomodation*> accomodations){
     // If the accomodations are not empty
-    if(!accomodations.empty())
+    if(!m_Accomodations.empty())
         // Go through all the elements of accomodations
-        for(auto acc : accomodations)
+        for(auto acc : m_Accomodations)
             delete acc; // Delete the memory
-    accomodations.clear(); // Clear the vector
+    m_Accomodations.clear();
     m_Accomodations = accomodations;
 }

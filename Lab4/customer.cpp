@@ -10,11 +10,17 @@
 vector<string> Customer::g_Names={};
 
 Customer::Customer(string name, string address, string mail){
+#ifdef DEBUG
+    std::cout<<"DEBUG: Attempting to create customer with name: "<<name<<", address: "<<address<<", and email: "<<mail<<std::endl;
+#endif
     if(!setName(name)){
         throw std::invalid_argument("Duplicate ID");
     }
     setAddress(address);
     setMail(mail);
+#ifdef DEBUG
+    std::cout<<"DEBUG: Successfully created customer with name: "<<name<<", address: "<<address<<", and email: "<<mail<<std::endl;
+#endif
 }
 
 Customer::~Customer(){
@@ -24,7 +30,7 @@ Customer::~Customer(){
     // We remove the name from the list of names used
     g_Names.erase(remove(g_Names.begin(), g_Names.end(), m_Name), g_Names.end());
 #ifdef DEBUG
-    std::cout<< "DEBUG: Destructor -  Customer with name " << m_Name << ", after cleaning, g_Names size: " << g_Names.size() <<std::endl;
+    std::cout<< "DEBUG: Destructor - Customer with name " << m_Name << ", after cleaning, g_Names size: " << g_Names.size() <<std::endl;
 #endif
 }
 

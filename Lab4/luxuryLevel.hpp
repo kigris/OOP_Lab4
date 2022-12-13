@@ -13,6 +13,7 @@
 using std::string;
 class LuxuryLevel {
 public:
+    LuxuryLevel()=default;
     LuxuryLevel(bool hasBBQ, bool hasSurroundSystem, bool hasBreakfastService, bool hasCleaningService, string hasAccomodationKind);
     inline bool getBBQ() const {return m_BBQ;}
     void setBBQ(bool has);

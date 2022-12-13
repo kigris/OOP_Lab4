@@ -37,6 +37,8 @@ public:
     void setBicycleRentPass(bool bicycleRent);
     inline bool getSwimmingPass() {return m_SwimmingPass;}
     void setSwimmingPass(bool swimmingPass);
+    inline static vector<string>& getGlobalIDs(){return g_IDs;}
+    inline static void setGlobalIDs(vector<string>& IDs){g_IDs=IDs;}
 private:
     static vector<string> g_IDs;
     string m_ID;

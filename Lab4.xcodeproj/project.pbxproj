@@ -20,6 +20,7 @@
 		95E82202294295A300A08D15 /* hotelRoom.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95E82200294295A300A08D15 /* hotelRoom.cpp */; };
 		95E82205294295AA00A08D15 /* cabin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95E82203294295AA00A08D15 /* cabin.cpp */; };
 		95E822082944E63F00A08D15 /* unitTesting.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95E822062944E63F00A08D15 /* unitTesting.cpp */; };
+		95EA0CAE2947463E00B66A3A /* fileManagement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 95EA0CAC2947463E00B66A3A /* fileManagement.cpp */; };
 		95FF3102293A7B57001571CF /* UI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 958F2187293A12C100118583 /* UI.cpp */; };
 		95FF3103293A7B5F001571CF /* vacationParkAPI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 959975012936355D009B7C4D /* vacationParkAPI.cpp */; };
 /* End PBXBuildFile section */
@@ -47,8 +48,6 @@
 		958F217F293961DD00118583 /* utils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = utils.hpp; sourceTree = "<group>"; };
 		958F21812939696A00118583 /* menus.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = menus.cpp; sourceTree = "<group>"; };
 		958F21822939696A00118583 /* menus.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = menus.hpp; sourceTree = "<group>"; };
-		958F21842939FD5900118583 /* fileManagement.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = fileManagement.cpp; sourceTree = "<group>"; };
-		958F21852939FD5900118583 /* fileManagement.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = fileManagement.hpp; sourceTree = "<group>"; };
 		958F2187293A12C100118583 /* UI.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = UI.cpp; sourceTree = "<group>"; };
 		958F2188293A12C100118583 /* UI.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = UI.hpp; sourceTree = "<group>"; };
 		959975012936355D009B7C4D /* vacationParkAPI.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = vacationParkAPI.cpp; sourceTree = "<group>"; };
@@ -59,6 +58,8 @@
 		95E82204294295AA00A08D15 /* cabin.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = cabin.hpp; sourceTree = "<group>"; };
 		95E822062944E63F00A08D15 /* unitTesting.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = unitTesting.cpp; sourceTree = "<group>"; };
 		95E822072944E63F00A08D15 /* unitTesting.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = unitTesting.hpp; sourceTree = "<group>"; };
+		95EA0CAC2947463E00B66A3A /* fileManagement.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = fileManagement.cpp; sourceTree = "<group>"; };
+		95EA0CAD2947463E00B66A3A /* fileManagement.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = fileManagement.hpp; sourceTree = "<group>"; };
 		95F48423291BFBF300AC547A /* booking.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = booking.cpp; sourceTree = "<group>"; };
 		95F48424291BFBF300AC547A /* booking.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = booking.hpp; sourceTree = "<group>"; };
 		95F48427291C0CC400AC547A /* accomodation.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = accomodation.cpp; sourceTree = "<group>"; };
@@ -122,8 +123,6 @@
 				958F217F293961DD00118583 /* utils.hpp */,
 				958F21812939696A00118583 /* menus.cpp */,
 				958F21822939696A00118583 /* menus.hpp */,
-				958F21842939FD5900118583 /* fileManagement.cpp */,
-				958F21852939FD5900118583 /* fileManagement.hpp */,
 				958F2187293A12C100118583 /* UI.cpp */,
 				958F2188293A12C100118583 /* UI.hpp */,
 				95E82200294295A300A08D15 /* hotelRoom.cpp */,
@@ -132,6 +131,8 @@
 				95E82204294295AA00A08D15 /* cabin.hpp */,
 				95E822062944E63F00A08D15 /* unitTesting.cpp */,
 				95E822072944E63F00A08D15 /* unitTesting.hpp */,
+				95EA0CAC2947463E00B66A3A /* fileManagement.cpp */,
+				95EA0CAD2947463E00B66A3A /* fileManagement.hpp */,
 			);
 			path = Lab4;
 			sourceTree = "<group>";
@@ -193,6 +194,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				95EA0CAE2947463E00B66A3A /* fileManagement.cpp in Sources */,
 				958F217A29395C7300118583 /* luxuryLevel.cpp in Sources */,
 				95FF3102293A7B57001571CF /* UI.cpp in Sources */,
 				958F217929395C7000118583 /* vacationPark.cpp in Sources */,

@@ -585,9 +585,9 @@ bool getCustomerDetails(VacationPark& vp,string& name, string& address, string& 
         waitForEnter();
         return false;
     }
-
+    
     employeeMode? cout << "Enter the address: ":cout << "Enter your address: ";
-
+    
     getline(cin, address);
     // Use regex to validate address
     if (!regex_match(address, addressRegex))
@@ -869,8 +869,8 @@ void bookServices(Booking* booking, VacationPark& vp, bool employeeMode){
     if(booking->getAccomodations().empty()){
         cout<<"Error: This booking is empty!"<<endl;
         employeeMode?
-                cout<<"It is needed to book at least one accomodation in order to be able to book services."<<endl:
-                cout<<"You must book at least one accomodation in order to be able to book services."<<endl;
+        cout<<"It is needed to book at least one accomodation in order to be able to book services."<<endl:
+        cout<<"You must book at least one accomodation in order to be able to book services."<<endl;
         waitForEnter();
         return;}
     Park* p = customerAPI::getBookingPark(vp, booking);
@@ -890,7 +890,7 @@ void bookServices(Booking* booking, VacationPark& vp, bool employeeMode){
     cout<<tabSpace()<<"Water bikes (activity pass): "<< (hasWB ? "yes":"no") << endl;
     
     employeeMode?   cout<< "Now it can be decided which services, of those that the park has, it is wanted." <<endl:
-                    cout<< "Now you can decide which services, of those that the park has, you want." <<endl;
+    cout<< "Now you can decide which services, of those that the park has, you want." <<endl;
     cout<< "NOTICE: Answer with 0 if no and with 1 if yes." <<endl;
     waitForEnter();
     bool passes[4]{false};
@@ -1051,7 +1051,7 @@ void deleteBooking(VacationPark& vp){
     if(booking==nullptr) return; // Check that user got a booking to edit
     bool isDeleted = employeeAPI::deleteBooking(index, vp);
     isDeleted?  cout<<"Booking deleted successfully!"<<endl:
-                cout<<"There was an error..."<<endl;
+    cout<<"There was an error..."<<endl;
     waitForEnter();
 }
 
@@ -1137,4 +1137,100 @@ map<int, void*>* userPrompt(map<int, tuple<type_index, string>>& prompts){
 /// General namespace end
 /// General namespace end
 /// General namespace end
+}
+
+
+namespace fileMngmt{
+/// File Management namespace begin
+/// File Management namespace begin
+/// File Management namespace begin
+
+
+string& getSaveName(int* countSaves){
+    static string returnStr;
+    returnStr = ""; // Reset it after each call
+    vector<string> saves = getSaveNames();
+    // If the number of saves is wanted to know
+    if(countSaves!=nullptr)
+        *countSaves = (int)saves.size();
+    // If there are no data files, return
+    if (saves.empty()) {
+        return returnStr;
+    }
+    // Show the list of files
+    cout << "---Saves list---" << endl;
+    for (int i = 0; i < saves.size(); i++) {
+        cout << tabSpace() << i + 1 << ". " << saves[i] << endl;}
+    cout<<"Enter your choice: ";
+    // Get the user's choice
+    int choice = getUserChoice(1, (int)saves.size());
+    if(choice==-1){
+        cout<<"Invalid choice..."<<endl;
+        waitForEnter();
+        return returnStr;}
+    // If the user's choice is valid, save that into the static string variable
+    returnStr = saves[choice - 1]; // Return it
+    return returnStr;
+}
+
+// Handle file management
+void fileManagement(VacationPark& vp) {
+    // File management loop
+    while (true) {
+        // Display file management menu
+        int(&choices)[2]{menus::displayFileManagementMenu()};
+        
+        // Get user choice
+        int choice = getUserChoice(choices[0], choices[1]);
+        if(choice==-1){
+            cout<<"Invalid choice..."<<endl;
+            waitForEnter();
+            continue;}
+        if(choice==choices[1]) return;
+        
+        // Convert user choice to FileManagementOption enumerator
+        FileManagementOption option = static_cast<FileManagementOption>(choice);
+        
+        // Handle user choice
+        if (option == FileManagementOption::STORE_DATA) {
+            // Store current information
+            string saveName{};
+            bool success = storeCurrentInformation(vp, saveName);
+            success ? cout<<"Save with name: \""<< saveName <<"\" was created successfully!"<<endl:
+            cout<<"Error: Something gone wrong trying to create your save. Check permissions...";
+        } else if(option == FileManagementOption::LOAD_DATA) {
+            int countSize{0};
+            // Load information
+            string saveName = getSaveName(&countSize);
+            if(countSize==0){
+                cout<<"Error: There are no saves created..."<<endl;
+                waitForEnter();
+                continue;}
+            if(saveName=="")
+                continue;
+            bool success = loadData(vp, saveName);
+            success ? cout<<"Save with name: \""<< saveName <<"\" was loaded successfully!"<<endl:
+            cout<<"Error: Something gone wrong trying to load your save. Check permissions...";
+        } else {
+            int countSize{0};
+            // Delete information
+            string saveName = getSaveName(&countSize);
+            if(countSize==0){
+                cout<<"Error: There are no saves created..."<<endl;
+                waitForEnter();
+                continue;}
+            if(saveName=="")
+                continue;
+            bool success = deleteData(saveName);
+            success ? cout<<"Save with name: \""<< saveName <<"\" was deleted successfully!"<<endl:
+            cout<<"Error: Something gone wrong trying to delete your save. Check permissions...";
+        }
+        waitForEnter();
+    }
+}
+
+
+/// File Management namespace end
+/// File Management namespace end
+/// File Management namespace end
 }

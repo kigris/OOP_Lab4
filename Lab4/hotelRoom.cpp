@@ -7,7 +7,7 @@
 
 #include "hotelRoom.hpp"
 // Constructor
-HotelRoom::HotelRoom(int id, int numberPeople, int size, bool bathroomWithBath, LuxuryLevel* luxuryLevel, int floor, string location, int numberOfBeds, bool childrenBed)
+HotelRoom::HotelRoom(int id, int size, int numberPeople, bool bathroomWithBath, LuxuryLevel* luxuryLevel, int floor, string location, int numberOfBeds, bool childrenBed)
     : Accomodation(id, size, numberPeople, bathroomWithBath, luxuryLevel),
       m_Floor(floor),
       m_Location(location),

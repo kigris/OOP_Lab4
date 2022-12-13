@@ -14,22 +14,23 @@ Accomodation::Accomodation(int id, int size, int numberPeople, bool bathroomWith
     if(!setID(id)){
         throw std::invalid_argument("Duplicate ID");
     }
-    setNumberPeople(numberPeople);
     setSize(size);
+    setNumberPeople(numberPeople);
     setBathroomWithBath(bathroomWithBath);
     setLuxuryLevel(luxuryLevel);
 }
 
 Accomodation::~Accomodation(){
 #ifdef DEBUG
-    std::cout<<"DEBUG: Destructor -  Accomodation with ID "<< m_ID << ", before cleaning, g_IDS size: " << g_IDs.size() <<std::endl;
+    std::cout<<"DEBUG: Destructor - Accomodation with ID "<< m_ID << ", before cleaning, g_IDS size: " << g_IDs.size() <<std::endl;
 #endif
     // We remove the ID from the list of IDs used
     g_IDs.erase(remove(g_IDs.begin(), g_IDs.end(), m_ID), g_IDs.end());
     // Delete the luxuryLevel memory
-    delete m_LuxuryLevel;
+    if(m_LuxuryLevel!=nullptr)
+        delete m_LuxuryLevel;
 #ifdef DEBUG
-    std::cout<<"DEBUG: Destructor -  Accomodation with ID "<< m_ID << ", after cleaning, g_IDS size: " << g_IDs.size() <<std::endl;
+    std::cout<<"DEBUG: Destructor - Accomodation with ID "<< m_ID << ", after cleaning, g_IDS size: " << g_IDs.size() <<std::endl;
 #endif
 }
 
@@ -63,6 +64,7 @@ void Accomodation::setLuxuryLevel(LuxuryLevel* luxuryLevel){
     // If there is one existing luxuryLevel, free the memory in the heap
     if(m_LuxuryLevel!=nullptr)
         delete m_LuxuryLevel;
+    
     // Assign the new pointer with the new memory
     m_LuxuryLevel = luxuryLevel;
 }

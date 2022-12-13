@@ -19,6 +19,7 @@ using namespace std;
 
 class VacationPark{
 public:
+    VacationPark(){};
     VacationPark(string name, string address);
     VacationPark(string name, string address, vector<unique_ptr<Park>> parks, vector<unique_ptr<Customer>> customers, vector<unique_ptr<Booking>> bookings);
     ~VacationPark();

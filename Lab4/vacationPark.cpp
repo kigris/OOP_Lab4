@@ -10,7 +10,10 @@
 vector<string> VacationPark::g_Names = {};
 
 VacationPark::VacationPark(string name, string address){
-
+    if(!setName(name)){
+        throw std::invalid_argument("Duplicate name");
+    }
+    setAddress(address);
 }
 
 VacationPark::VacationPark(string name, string address, vector<unique_ptr<Park>> parks, vector<unique_ptr<Customer>> customers, vector<unique_ptr<Booking>> bookings){
@@ -33,6 +36,8 @@ bool VacationPark::setName(string name){
     for(string n : g_Names)
         if(n==name)
             return false;
+    // We remove the name from the list of names used
+    g_Names.erase(remove(g_Names.begin(), g_Names.end(), m_Name), g_Names.end());
     // If the name given is not found
     m_Name = name;
     // We add the name given to the names taken

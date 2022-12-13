@@ -16,6 +16,7 @@
 using namespace std;
 
 namespace menus{
+int (&displayFileManagementMenu())[2];
 
 void displayCustomerMenu();
 void displayMainMenu();
