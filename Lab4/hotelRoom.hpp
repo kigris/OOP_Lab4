@@ -16,7 +16,6 @@ using namespace std;
 class HotelRoom : public Accomodation {
 public:
     // Constructor
-    HotelRoom()=default;
     HotelRoom(int id, int size, int numberPeople, bool bathroomWithBath, LuxuryLevel* luxuryLevel, int floor, string location, int numberOfBeds, bool childrenBed);
     
     // Getters

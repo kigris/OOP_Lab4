@@ -101,6 +101,11 @@ void createPark(VacationPark& vp) {
         return;
     
     Service* service = ownerAPI::createService(serviceArgs);
+    // Free all the values allocated dynamically inside serviceArgs
+    map<int, void*>::iterator it;
+    for (it = serviceArgs->begin(); it != serviceArgs->end(); ++it)
+      delete (Value<bool>*)(it->second);
+
     delete serviceArgs; // Free up the memory of the pointer
     // Create the park
     ownerAPI::createPark(vp, name, address, service) ?
@@ -225,7 +230,16 @@ void createAccomodation(VacationPark& vp){
     // Check if it was created
     isCreated ? cout<<"HotelRoom created successfully!"<<endl:
     cout<<"There was an error..."<<endl;
-    
+    // Release the memory allocated dynamically in commonArgs by getAccomodationDetails()
+    map<int, void*>::iterator it;
+    for (it = commonArgs->begin(); it != commonArgs->end(); ++it){
+        if(typeid(int)==typeid(it->first))
+            delete (Value<int>*)(it->second);
+        if(typeid(bool)==typeid(it->first))
+            delete (Value<bool>*)(it->second);
+        if(typeid(string)==typeid(it->first))
+            delete (Value<string>*)(it->second);
+    }
     // Release the memory for commonArgs
     delete commonArgs;
     waitForEnter();
@@ -320,11 +334,21 @@ void editAccomodation(VacationPark& vp){
     
     // Verify updated
     bool isUpdated = ownerAPI::updateAccomodation(acc, commonArgs, type);
+    // Release the memory allocated dynamically in commonArgs by getAccomodationDetails()
+    map<int, void*>::iterator it;
+    for (it = commonArgs->begin(); it != commonArgs->end(); ++it){
+        if(typeid(int)==typeid(it->first))
+            delete (Value<int>*)(it->second);
+        if(typeid(bool)==typeid(it->first))
+            delete (Value<bool>*)(it->second);
+        if(typeid(string)==typeid(it->first))
+            delete (Value<string>*)(it->second);
+    }
+    delete commonArgs; // Release the memory for commonArgs
     // Check if it was updated
     isUpdated ? cout<<"Accomodation updated successfully!"<<endl:
     cout<<"There was an error..."<<endl;
     waitForEnter();
-    delete commonArgs; // Release the memory for commonArgs
 }
 
 void deleteAccomodation(VacationPark& vp){
@@ -403,7 +427,7 @@ map<int, void*>* getAccomodationDetails(VacationPark& vp, ownerAPI::ACC_TYPE* ty
             {7, {typeid(int), "Number of beds (positive number): "}},
             {8, {typeid(bool), "Children bed? (0 no, 1 yes): "}},
         };
-        auto hotelArgs = general::userPrompt(hotelPrompts);
+        map<int, void*>* hotelArgs = general::userPrompt(hotelPrompts);
         if(hotelArgs==nullptr)
             return nullptr;
         // Merge hotelArgs into commonArgs
@@ -443,7 +467,7 @@ map<int, void*>* getAccomodationDetails(VacationPark& vp, ownerAPI::ACC_TYPE* ty
         return nullptr;
     // Merge luxuryArgs into commonArgs
     commonArgs->insert(luxuryArgs->begin(), luxuryArgs->end());
-    
+    delete luxuryArgs; // Free up the luxuryArgs
     return commonArgs;
 }
 
@@ -665,6 +689,7 @@ Accomodation* getAccomodationFiltered(VacationPark& vp, Park* park, Booking* boo
         return nullptr;
     filterArgs->emplace(1, new Value<int>{typeAccomodation});
     map<int, tuple<Accomodation*, Park*>>* accFiltered = filterAccomodations(filterArgs, vp, park);
+    delete filterArgs; // Free the memory
     if(accFiltered->empty()){
         employeeMode ? cout<<"No accomodations have match the filters provided..."<<endl:
         cout<<"No accomodations have match your filters..."<<endl;
@@ -691,7 +716,9 @@ Accomodation* getAccomodationFiltered(VacationPark& vp, Park* park, Booking* boo
         waitForEnter();
         return nullptr;}
     // Return the accomodation selected by the user
-    return get<0>(accFiltered->at(choice));
+    auto acc = get<0>(accFiltered->at(choice));
+    delete accFiltered;
+    return acc;
 }
 
 void editBookings(VacationPark& vp, Customer* customer, bool employeeMode){
@@ -1111,7 +1138,7 @@ map<int, void*>* userPrompt(map<int, tuple<type_index, string>>& prompts){
                 waitForEnter();
                 return nullptr;}
             // Create the wrapper container that will contain the value itself
-            auto value = new Value<bool>{(bool)answer};
+            Value<bool>* value = new Value<bool>{(bool)answer};
             // Emplace will create the object direct in place
             args->emplace(counter, value);
         }
