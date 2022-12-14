@@ -35,7 +35,9 @@ bool storeCurrentInformation(VacationPark& vp, string& name) {
         for(const auto& c : vp.getCustomers()){
             customersFS.write(reinterpret_cast<const char*>(c.get()), sizeof(Customer));
         }
-    } else{return false;}
+    } else{
+        customersFS.close();
+        return false;}
 
     customersFS.close(); // Close the file
     
@@ -75,7 +77,12 @@ bool storeCurrentInformation(VacationPark& vp, string& name) {
                 luxuryLevelFS.write(reinterpret_cast<const char*>(a->getLuxuryLevel()), sizeof(LuxuryLevel));
             }
         }
-    }else{return false;}
+    }else{
+        parksFS.close();
+        servicesFS.close();
+        accomodationsFS.close();
+        luxuryLevelFS.close();
+        return false;}
     parksFS.close();
     servicesFS.close();
     accomodationsFS.close();
@@ -97,7 +104,10 @@ bool storeCurrentInformation(VacationPark& vp, string& name) {
             for(int i=0;i<accSize;i++)
                 bookingsFS<<b->getAccomodations().at(i)->getId()<<endl;
         }
-    } else {return false;}
+    } else {
+        bookingsFS.close();
+        return false;}
+    bookingsFS.close();
     
     string classGIDsFN(saveFolder+"/classGIDs.dat");
     ofstream classGIDsFS{classGIDsFN, ios::out|ios::binary};
@@ -130,7 +140,9 @@ bool storeCurrentInformation(VacationPark& vp, string& name) {
             string gID = Booking::getGlobalIDs().at(i);
             classGIDsFS.write(reinterpret_cast<const char*>(&gID), sizeof(gID));
         }
-    }else{return false;}
+    }else{
+        classGIDsFS.close();
+        return false;}
     classGIDsFS.close();
     return true;
 }
@@ -148,7 +160,9 @@ bool loadData(VacationPark& vp, string fileSave){
             customersFS.read(reinterpret_cast<char*>(customer.get()), sizeof(Customer));
             vp.getCustomers().emplace_back(move(customer));
         }
-    } else{return false;}
+    } else{
+        customersFS.close();
+        return false;}
     customersFS.close();
     
     string parksFN = "data/"+fileSave+"/parks.txt";
@@ -227,8 +241,16 @@ bool loadData(VacationPark& vp, string fileSave){
             park->setAcccomodations(accomodations);
             vp.getParks().emplace_back(move(park));
         }
-    }else{return false;}
-    
+    }else{
+        parksFS.close();
+        servicesFS.close();
+        luxuryLevelFS.close();
+        accomodationsFS.close();
+        return false;}
+    parksFS.close();
+    servicesFS.close();
+    luxuryLevelFS.close();
+    accomodationsFS.close();
     
     string bookingsFN{"data/"+fileSave+"/bookings.txt"};
     ifstream bookingsFS{bookingsFN, ios::out};
@@ -274,8 +296,10 @@ bool loadData(VacationPark& vp, string fileSave){
             unique_ptr<Booking> booking = make_unique<Booking>(ID, customer, accomodations, activityPass, bicycleRentPass, swimmingPass);
             vp.getBookings().emplace_back(move(booking));
         }
-    } else {return false;}
-    
+    } else {
+        bookingsFS.close();
+        return false;}
+    bookingsFS.close();
     string classGIDsFN("data/"+fileSave+"/classGIDs.dat");
     ifstream classGIDsFS{classGIDsFN, ios::binary};
     if(classGIDsFS.is_open()){
@@ -321,12 +345,10 @@ bool loadData(VacationPark& vp, string fileSave){
             globalIB.push_back(gID);
         }
         Booking::setGlobalIDs(globalIB);
-    }else{return false;}
-    
-    parksFS.close();
-    servicesFS.close();
-    luxuryLevelFS.close();
-    accomodationsFS.close();
+    }else{
+        classGIDsFS.close();
+        return false;}
+
     classGIDsFS.close();
     return true;
 }
