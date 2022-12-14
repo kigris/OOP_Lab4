@@ -40,7 +40,6 @@
 /* Begin PBXFileReference section */
 		952E5C7D29112D1F008981D0 /* Lab4 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Lab4; sourceTree = BUILT_PRODUCTS_DIR; };
 		952E5C8029112D1F008981D0 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		953709522949FD7E00C0B966 /* dirent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dirent.h; sourceTree = "<group>"; };
 		9560181E292BAB1100BDC544 /* vacationPark.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = vacationPark.cpp; sourceTree = "<group>"; };
 		9560181F292BAB1100BDC544 /* vacationPark.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = vacationPark.hpp; sourceTree = "<group>"; };
 		95601821292BB7A200BDC544 /* luxuryLevel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = luxuryLevel.cpp; sourceTree = "<group>"; };
@@ -103,7 +102,6 @@
 		952E5C7F29112D1F008981D0 /* Lab4 */ = {
 			isa = PBXGroup;
 			children = (
-				953709522949FD7E00C0B966 /* dirent.h */,
 				952E5C8029112D1F008981D0 /* main.cpp */,
 				95F48423291BFBF300AC547A /* booking.cpp */,
 				95F48424291BFBF300AC547A /* booking.hpp */,

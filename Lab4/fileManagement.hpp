@@ -20,6 +20,7 @@
 #include "vacationParkAPI.hpp"
 #include <filesystem>
 using namespace std;
+using namespace filesystem;
 
 bool storeCurrentInformation(VacationPark& vp, string& name);
 bool loadData(VacationPark& vp, string fileSave);

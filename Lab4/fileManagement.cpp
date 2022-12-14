@@ -458,7 +458,7 @@ bool deleteData(const std::string& saveName) {
                 continue;
             }
             // If the entry is a directory, delete its contents recursively
-            if (std::filesystem::is_directory(entry.path())) {
+            if (is_directory(entry.path())) {
                 // If the file could not be deleted
                 if (!deleteData(entry.path().string())) {
                     // Close the directory
@@ -466,13 +466,13 @@ bool deleteData(const std::string& saveName) {
                 }
             } else {
                 // If the entry is a file, delete it
-                if (!std::filesystem::remove(entry)) {
+                if (!remove(entry)) {
                     return false;
                 }
             }
         }
         // Delete the directory
-        if (!std::filesystem::remove(fullPath)) {
+        if (!filesystem::remove(fullPath)) {
             return false;
         }
         return true;
