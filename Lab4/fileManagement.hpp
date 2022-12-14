@@ -7,13 +7,19 @@
 
 #ifndef fileManagement_hpp
 #define fileManagement_hpp
-
+// If compiled in Windows
+#ifdef _WIN32
+#include <Windows.h>
+#include "dirent.h"
+#
+#else // else
+#include <unistd.h>
+#include <dirent.h>
+#endif
 #include <string>
 #include <fstream>
 #include <sstream>
-#include <dirent.h>
 #include "vacationParkAPI.hpp"
-#include <unistd.h>
 #include <filesystem>
 using namespace std;
 

@@ -13,6 +13,7 @@
 #include "customer.hpp"
 #include "accomodation.hpp"
 #include <vector>
+#include <stdexcept>
 using std::string;
 using std::vector;
 

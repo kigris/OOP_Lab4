@@ -13,6 +13,7 @@
 #endif
 
 #include <stdio.h>
+#include <stdexcept>
 #include <string>
 #include <vector>
 using std::vector;

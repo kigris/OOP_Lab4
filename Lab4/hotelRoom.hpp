@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include <string>
 #include "accomodation.hpp"
+#include <stdexcept>
 using namespace std;
 
 class HotelRoom : public Accomodation {

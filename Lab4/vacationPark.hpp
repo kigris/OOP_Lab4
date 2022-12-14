@@ -13,6 +13,7 @@
 #include <vector>
 #include <memory>
 #include "customer.hpp"
+#include <stdexcept>
 #include "park.hpp"
 #include "booking.hpp"
 using namespace std;

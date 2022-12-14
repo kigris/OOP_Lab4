@@ -10,6 +10,7 @@
 
 #include <stdio.h>
 #include "accomodation.hpp"
+#include <stdexcept>
 // Cabin class
 class Cabin : public Accomodation {
 public:

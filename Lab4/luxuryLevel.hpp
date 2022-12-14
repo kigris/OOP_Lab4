@@ -9,6 +9,7 @@
 #define luxuryLevel_hpp
 
 #include <stdio.h>
+#include <stdexcept>
 #include <string>
 using std::string;
 class LuxuryLevel {

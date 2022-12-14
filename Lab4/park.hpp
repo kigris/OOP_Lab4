@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include <string>
 #include "service.hpp"
+#include <stdexcept>
 #include "accomodation.hpp"
 #include <vector>
 #include "hotelRoom.hpp"
