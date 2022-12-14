@@ -7,13 +7,11 @@
 
 #ifndef fileManagement_hpp
 #define fileManagement_hpp
-// If compiled in Windows
+
+
 #ifdef _WIN32
-#include <Windows.h>
-#include "dirent.h"
-#
-#else // else
-#include <unistd.h>
+#include <windows.h>
+#else
 #include <dirent.h>
 #endif
 #include <string>
@@ -26,5 +24,5 @@ using namespace std;
 bool storeCurrentInformation(VacationPark& vp, string& name);
 bool loadData(VacationPark& vp, string fileSave);
 vector<string> getSaveNames();
-bool deleteData(string fileSave);
+bool deleteData(const std::string& saveName);
 #endif /* fileManagement_hpp */

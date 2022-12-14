@@ -357,6 +357,27 @@ vector<string> getSaveNames(){
     // Get a list of folders with the data
     vector<string> files{}; // Store all the folders data here
     const char *dir_name = "data"; // Folder to search in
+#ifdef _WIN32
+    // Windows version
+    WIN32_FIND_DATA fd;
+    HANDLE hFind = FindFirstFile(dir_name, &fd);
+    if (hFind != INVALID_HANDLE_VALUE) {
+        do {
+            // Compare to ignore current dir (.) or parent dir (..)
+            // Ignore temporary folders that start with .something
+            if (strcmp(fd.cFileName, ".") == 0 ||
+                strcmp(fd.cFileName, "..") == 0 ||
+                fd.cFileName[0] == '.')
+                continue; // ignore them
+
+            files.push_back(fd.cFileName); // otherwise push them
+        } while (FindNextFile(hFind, &fd));
+
+        FindClose(hFind);
+    } else {
+        cout << "Error: Directory " << dir_name << " not found" << endl;
+    }
+#else
     DIR* dir = opendir(dir_name);
     if (dir != nullptr) {
         struct dirent *entry; // Save directory properties here
@@ -374,44 +395,84 @@ vector<string> getSaveNames(){
     } else {
         cout<<"Error: Directory "<<dir_name<<" not found"<<endl;
     }
+#endif
     sort(files.begin(), files.end(), greater<>());
     return files;
 }
 
-bool deleteData(string saveName){
-    const string parentFolderName="data";
-    string fullPath = parentFolderName+"/"+saveName;
+//bool deleteData(string saveName){
+//    const string parentFolderName="data";
+//    string fullPath = parentFolderName+"/"+saveName;
+//    // Open the directory specified by dir_name
+//    DIR* dir = opendir(fullPath.c_str());
+//    // If the directory was successfully opened
+//    if(dir != nullptr){
+//        struct dirent* entry;
+//        // Read the entries in the directory one by one
+//        while((entry=readdir(dir))!=nullptr){
+//            // Skip the current directory and the parent directory
+//            if(strcmp(entry->d_name, ".")==0 || strcmp(entry->d_name, "..")==0)
+//                continue;
+//            char path[512]; // directory name
+//            snprintf(path, sizeof(path), "%s/%s", fullPath.c_str(), entry->d_name);
+//            // If the entry is a directory, delete its contents recursively
+//            if(entry->d_type==DT_DIR){
+//                // If the file could not be deleted
+//                if(!deleteData(path)){
+//                    // Close the directory
+//                    closedir(dir);
+//                    return false;}
+//            } else {
+//                // If the entry is a file, delete it
+//                if(unlink(path) < 0){
+//                    // Close the directory
+//                    closedir(dir);
+//                    return false;}
+//            }
+//        }
+//        // Close the directory
+//        closedir(dir);
+//        // Delete the directory
+//        if(rmdir(fullPath.c_str()) < 0){
+//            return false;
+//        }
+//        return true;
+//    } else {
+//        // The directory could not be opened
+//        return false;
+//    }
+//}
+
+bool deleteData(const std::string& saveName) {
+    const std::string parentFolderName = "data";
+    std::string fullPath = parentFolderName + "/" + saveName;
+
     // Open the directory specified by dir_name
-    DIR* dir = opendir(fullPath.c_str());
+    std::filesystem::directory_iterator dir(fullPath);
     // If the directory was successfully opened
-    if(dir != nullptr){
-        struct dirent* entry;
+    if (dir != std::filesystem::directory_iterator{}) {
         // Read the entries in the directory one by one
-        while((entry=readdir(dir))!=nullptr){
+        for (const auto& entry : dir) {
             // Skip the current directory and the parent directory
-            if(strcmp(entry->d_name, ".")==0 || strcmp(entry->d_name, "..")==0)
+            if (entry.path().filename() == "." || entry.path().filename() == "..") {
                 continue;
-            char path[512]; // directory name
-            snprintf(path, sizeof(path), "%s/%s", fullPath.c_str(), entry->d_name);
+            }
             // If the entry is a directory, delete its contents recursively
-            if(entry->d_type==DT_DIR){
+            if (std::filesystem::is_directory(entry.path())) {
                 // If the file could not be deleted
-                if(!deleteData(path)){
+                if (!deleteData(entry.path().string())) {
                     // Close the directory
-                    closedir(dir);
-                    return false;}
+                    return false;
+                }
             } else {
                 // If the entry is a file, delete it
-                if(unlink(path) < 0){
-                    // Close the directory
-                    closedir(dir);
-                    return false;}
+                if (!std::filesystem::remove(entry)) {
+                    return false;
+                }
             }
         }
-        // Close the directory
-        closedir(dir);
         // Delete the directory
-        if(rmdir(fullPath.c_str()) < 0){
+        if (!std::filesystem::remove(fullPath)) {
             return false;
         }
         return true;
@@ -420,4 +481,3 @@ bool deleteData(string saveName){
         return false;
     }
 }
-

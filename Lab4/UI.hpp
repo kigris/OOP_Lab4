@@ -20,7 +20,7 @@
 using namespace std;
 
 const regex nameRegex("[a-zA-Z]+");
-const regex addressRegex("[a-zA-Z0-9 ]+");
+const regex addressRegex("^[a-zA-Z0-9.']+[a-zA-Z0-9.' ]+");
 const regex stringRegex("[a-zA-Z0-9/:]+ *");
 const int BOOKING_ID_LENGTH{8};
 
