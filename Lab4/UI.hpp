@@ -16,10 +16,9 @@
 #include <typeindex>
 #include <map>
 #include "fileManagement.hpp"
-#include <unordered_map>
 using namespace std;
 
-const regex nameRegex("[a-zA-Z]+");
+const regex nameRegex("[a-zA-Z0-9]+");
 const regex addressRegex("^[a-zA-Z0-9.']+[a-zA-Z0-9.' ]+");
 const regex stringRegex("[a-zA-Z0-9/:]+ *");
 const int BOOKING_ID_LENGTH{8};
@@ -30,7 +29,8 @@ enum class MainMenuOption {
     ACCESS_AS_EMPLOYEE = 2,
     ACCESS_AS_CUSTOMER = 3,
     FILE_MANAGEMENT = 4,
-    EXIT = 5
+    VIEW_DATA = 5,
+    EXIT = 6
 };
 
 // Enumeration for file management menu options
@@ -46,7 +46,7 @@ void accessAsOwner(VacationPark& vp);
 void createPark(VacationPark& vp);
 void editPark(VacationPark& vp);
 void editParkService(Park* park);
-Park* getPark(VacationPark& vp, string displayText, int* index=nullptr);
+Park* getPark(VacationPark& vp, string displayText, int* index=nullptr, bool editMode=false);
 void deletePark(VacationPark& vp);
 void createAccomodation(VacationPark& vp);
 map<int, void*>* getAccomodationDetails(VacationPark& vp, ownerAPI::ACC_TYPE* type, ownerAPI::ACC_TYPE* typeRet=nullptr);
@@ -88,6 +88,7 @@ void deleteBooking(VacationPark& vp);
 namespace general{
 template<typename T, typename U> int editFeature(string textDisplay, T object, U opt, bool (*func)(T, string, U), const regex re = regex{});
 map<int, void*>* userPrompt(map<int, tuple<type_index, string>>& prompts);
+void viewData(VacationPark& vp);
 }
 
 namespace fileMngmt{

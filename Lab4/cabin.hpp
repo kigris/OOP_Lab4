@@ -11,11 +11,14 @@
 #include <stdio.h>
 #include "accomodation.hpp"
 #include <stdexcept>
+using namespace std;
 // Cabin class
 class Cabin : public Accomodation {
 public:
     // Constructor
     Cabin(int id, int size, int numberPeople, bool bathroomWithBath, LuxuryLevel* luxuryLevel, int bedrooms);
+    // Destructor
+    ~Cabin();
     
     // Getter
     inline int getBedrooms() const {return m_Bedrooms;}
@@ -24,7 +27,7 @@ public:
     void setBedrooms(int bedrooms);
     
     // Overriden function
-    void toString() override;
+    const string toString() const override;
 private:
     int m_Bedrooms;
 };

@@ -8,14 +8,21 @@
 #ifndef service_hpp
 #define service_hpp
 
+#ifdef DEBUG
+#include <iostream>
+#include <ostream>
+#endif
+
 #include <stdio.h>
 #include <stdexcept>
 #include <string>
+
 using std::string;
 class Service{
 public:
     Service()=default;
     Service(bool hasSubtropicSwimmingPool, bool hasSportsInfrastructure, bool hasBowlingAlley, bool hasBicycleRent, bool hasChildrenParadise, bool hasWaterBikes);
+    ~Service();
     inline bool getSubtropicSwimmingPool() {return m_SubtropicSwimmingPool;}
     void setSubtropicSwimmingPool(bool has);
     inline bool getSportsInfrastructure() {return m_SportsInfrastructure;}
@@ -28,7 +35,9 @@ public:
     void setChildrenParadise(bool has);
     inline bool getWaterBikes() {return m_WaterBikes;}
     void setWaterBikes(bool has);
+    friend std::ostream& operator<<(std::ostream& out, const Service& service);
 private:
+    // Private members
     bool m_SubtropicSwimmingPool;
     bool m_SportsInfrastructure;
     bool m_BowlingAlley;

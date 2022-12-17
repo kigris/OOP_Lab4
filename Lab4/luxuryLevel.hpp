@@ -8,6 +8,9 @@
 #ifndef luxuryLevel_hpp
 #define luxuryLevel_hpp
 
+#ifdef DEBUG
+#include <iostream>
+#endif
 #include <stdio.h>
 #include <stdexcept>
 #include <string>
@@ -16,6 +19,7 @@ class LuxuryLevel {
 public:
     LuxuryLevel()=default;
     LuxuryLevel(bool hasBBQ, bool hasSurroundSystem, bool hasBreakfastService, bool hasCleaningService, string hasAccomodationKind);
+    ~LuxuryLevel();
     inline bool getBBQ() const {return m_BBQ;}
     void setBBQ(bool has);
     inline bool getSurroundSystem() const {return m_SurroundSystem;}
@@ -26,6 +30,7 @@ public:
     void setCleaningService(bool has);
     inline string getAccomodationKind() const {return m_AccomodationKind;}
     void setAccomodationKind(string accomodationKind);
+    const string toString() const;
 private:
     bool m_BBQ;
     bool m_SurroundSystem;

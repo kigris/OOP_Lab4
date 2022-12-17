@@ -10,25 +10,39 @@ using std::string;
 
 vector<string> Booking::g_IDs = {};
 
-Booking::Booking(string id, Customer* customer, bool activityPass, bool bicycleRent, bool swimmingPass){
+Booking::Booking(string id, Customer* customer, bool activityPass, bool sportsPass, bool bicycleRent, bool swimmingPass){
+#ifdef DEBUG
+    std::cout<< "DEBUG: Constructor - Booking with ID " << id << ", before adding, g_IDs size: " << g_IDs.size() <<std::endl;
+#endif
     if(!setID(id)){
         throw std::invalid_argument("Duplicate ID");
     }
     setCustomer(customer);
     setActivityPass(activityPass);
+    setSportsPass(sportsPass);
     setBicycleRentPass(bicycleRent);
     setSwimmingPass(swimmingPass);
+#ifdef DEBUG
+    std::cout<< "DEBUG: Constructor - Booking with ID " << id << ", after adding, g_IDs size: " << g_IDs.size() <<std::endl;
+#endif
 };
 
-Booking::Booking(string id, Customer* customer, vector<Accomodation*> accomodations, bool activityPass, bool bicycleRent, bool swimmingPass){
+Booking::Booking(string id, Customer* customer, vector<Accomodation*> accomodations, bool activityPass, bool sportsPass, bool bicycleRent, bool swimmingPass){
+#ifdef DEBUG
+    std::cout<< "DEBUG: Constructor - Booking with ID " << id << ", before adding, g_IDs size: " << g_IDs.size() <<std::endl;
+#endif
     if(!setID(id)){
         throw std::invalid_argument("Duplicate ID");
     }
     setCustomer(customer);
     setAccomodations(accomodations);
     setActivityPass(activityPass);
+    setSportsPass(sportsPass);
     setBicycleRentPass(bicycleRent);
     setSwimmingPass(swimmingPass);
+#ifdef DEBUG
+    std::cout<< "DEBUG: Constructor - Booking with ID " << id << ", after adding, g_IDs size: " << g_IDs.size() <<std::endl;
+#endif
 };
 
 Booking::~Booking(){

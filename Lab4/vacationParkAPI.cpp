@@ -15,7 +15,7 @@ bool findAccomodation(vector<unique_ptr<Park>>& parks, int id){
     // Look over all the parks
     for(auto const& p : parks)
         // Look over all the accomodations of a park
-        for(auto const& a : p->getAcccomodations())
+        for(auto const& a : p->getAccomodations())
             if(a->getId() == id)
                 return true;
     return false;
@@ -25,7 +25,7 @@ bool findAccomodation(vector<unique_ptr<Park>>& parks, int id, Accomodation*& ac
     // Look over all the parks
     for(auto const& p : parks)
         // Look over all the accomodations of a park
-        for(auto const& a : p->getAcccomodations())
+        for(auto const& a : p->getAccomodations())
             if(a->getId() == id){
                 accomodation = a;
                 return true;
@@ -41,12 +41,16 @@ bool findPark(vector<unique_ptr<Park>>& parks, string parkName){
     return false;
 }
 
-Park* getPark(VacationPark& vp, int index){
+Park* getPark(VacationPark& vp, int index, bool editMode){
+    // Check if the park is reserved and user is in edit mode
+    if(vp.getParks().at(index)->isReferenced() && editMode)
+        return nullptr;
+    // Otherwise return the park
     return vp.getParks().at(index).get();
 }
 
 Accomodation* getAccomodation(VacationPark& vp, int parkIndex, int accomodationIndex){
-    return vp.getParks().at(parkIndex).get()->getAcccomodations().at(accomodationIndex);
+    return vp.getParks().at(parkIndex).get()->getAccomodations().at(accomodationIndex);
 }
 
 bool createPark(VacationPark& vp, string name, string address, Service* service){
@@ -55,8 +59,10 @@ bool createPark(VacationPark& vp, string name, string address, Service* service)
     
     // Add the Costumer object to the list of costumers in vp
     try {
+        // Add the park to the list of parks
         vp.getParks().emplace_back(move(park));
     } catch(exception){
+        // If the park could not be added, we decrease the references
         return false;
     }
     return true;
@@ -87,7 +93,7 @@ bool updateParkServices(Park* park, bool input[]){
 bool deletePark(int index, VacationPark& vp){
     vector<unique_ptr<Park>>& parks = vp.getParks();
     // Check if the park has an accomodation that is booked
-    for(auto a : parks[index]->getAcccomodations())
+    for(auto a : parks[index]->getAccomodations())
         if(a->isReserved())
             return false;
     // If not, it can be deleted
@@ -186,17 +192,17 @@ bool updateAccomodation(Accomodation* accomodation, map<int,void*>* args, ACC_TY
 bool deleteAccomodation(int parkIndex, int accomodationIndex, VacationPark& vp){
     Park* p = vp.getParks()[parkIndex].get();
     // If the accomodation is reserved, it can not be deleted
-    if(p->getAcccomodations()[accomodationIndex]->isReserved())
+    if(p->getAccomodations()[accomodationIndex]->isReserved())
         return false;
 #ifdef DEBUG
-    const size_t accSizeBefore = p->getAcccomodations().size();
+    const size_t accSizeBefore = p->getAccomodations().size();
 #endif
     // Delete the accomodation of the memory first
-    delete p->getAcccomodations()[accomodationIndex];
+    delete p->getAccomodations()[accomodationIndex];
     // Then delete the pointer from the vector
-    p->getAcccomodations().erase(p->getAcccomodations().begin()+accomodationIndex);
+    p->getAccomodations().erase(p->getAccomodations().begin()+accomodationIndex);
 #ifdef DEBUG
-    const size_t accSizeAfter = p->getAcccomodations().size();
+    const size_t accSizeAfter = p->getAccomodations().size();
     // Check if the accomodation has shrink
     assert(accSizeAfter<accSizeBefore);
 #endif
@@ -266,32 +272,44 @@ bool findBooking(vector<unique_ptr<Booking>>& bookings, string id){
     return false;
 }
 
-bool createBooking(VacationPark& vp, Customer* customer, Accomodation* accomodation, string id, bool activityPass, bool bicycleRent, bool swimmingPass){
+bool createBooking(VacationPark& vp, Customer* customer, Accomodation* accomodation, string id, bool activityPass, bool sportsPass, bool bicycleRent, bool swimmingPass){
     auto& bookings = vp.getBookings(); // Get a reference to bookings
     try{
         // Try to create and add the new booking
-        Booking* b = new Booking(id, customer, activityPass, bicycleRent, swimmingPass);
+        unique_ptr<Booking> b = make_unique<Booking>(id, customer, activityPass, sportsPass, bicycleRent, swimmingPass);
+        // Emplace the accomodation in the booking
         b->getAccomodations().emplace_back(accomodation);
         // Mark the accomodation as used
-        bookings.emplace_back(b);
-        accomodation->reserve();}
+        accomodation->reserve();
+        // Get booking's park
+        Park* p = getBookingPark(vp, b.get());
+        // Increase references to the park of the booking
+        p->incrementReferences();
+        // Emplace the booking in the bookings vector
+        bookings.emplace_back(move(b));}
     catch(...){
         return false;}
     return true;
 }
 
-bool updateBooking(Booking* booking, Accomodation* accomodation){
+bool updateBooking(VacationPark& vp, Booking* booking, Accomodation* accomodation, bool parkReference){
     try{
         // Try to update the existing booking
         booking->getAccomodations().emplace_back(accomodation);
         // Mark the accomodation as used
-        accomodation->reserve();}
+        accomodation->reserve();
+        // If the park needs to be references because one of its accomodations is reserved
+        if(parkReference){
+            // Get the park and increment its references
+            Park* p{getBookingPark(vp, booking)};
+            p->incrementReferences();}
+    }
     catch(...){
         return false;}
     return true;
 }
 
-bool removeAccFromBooking(Booking* booking, Accomodation* accomodation){
+bool removeAccFromBooking(Booking* booking, Accomodation* accomodation, VacationPark& vp){
     auto& accomodations = booking->getAccomodations();
     try{
         // Try to delete the accomodation from the booking
@@ -305,7 +323,12 @@ bool removeAccFromBooking(Booking* booking, Accomodation* accomodation){
             booking->setSportsPass(false);
             booking->setActivityPass(false);
             booking->setSwimmingPass(false);
-            booking->setBicycleRentPass(false);}
+            booking->setBicycleRentPass(false);
+            // Get the booking's park
+            Park* p = getBookingPark(vp, booking);
+            // Decrease references to the park of the booking
+            p->decrementReferences();
+            }
     }
     catch(...){
         return false;}
@@ -320,7 +343,7 @@ Park* getBookingPark(VacationPark& vp, Booking* booking){
         // If have been found
         if(found) break; // break
         // Iterate over all the accomodations
-        for(auto const& a : p->getAcccomodations()){
+        for(auto const& a : p->getAccomodations()){
             // Find the accomodation with the same id as the first accomodation of the booking
             if(a->getId()==booking->getAccomodations()[0]->getId()){
                 park = p.get();

@@ -42,6 +42,9 @@ int main(int argc, const char * argv[]){
             case MainMenuOption::FILE_MANAGEMENT:
                 fileMngmt::fileManagement(vacationPark);
                 break;
+            case MainMenuOption::VIEW_DATA:
+                general::viewData(vacationPark);
+                break;
             case MainMenuOption::EXIT:
                 exit = true;
                 break;

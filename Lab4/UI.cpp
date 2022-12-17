@@ -23,32 +23,38 @@ void accessAsOwner(VacationPark& vp) {
         // Handle the user's choice
         switch (choice) {
             case 1:{
-                // The user chose to register
+                // Owner wants to create a park
                 createPark(vp);
                 break;}
             case 2:{
+                // Owner wants to edit a park
                 editPark(vp);
                 break;}
             case 3:{
+                // Owner wants to delete a park
                 deletePark(vp);
                 break;}
             case 4:{
+                // Owner wants to create an accomodation
                 createAccomodation(vp);
                 break;}
             case 5:{
+                // Owner wants to edit an accomodation
                 editAccomodation(vp);
                 break;}
             case 6:{
+                // Owner wants to delete an accomodation
                 deleteAccomodation(vp);
                 break;}
-            case 7:
-                // The user chose to go back
+            case 7:{
+                // The owner wants to exit the main menu
                 stayMenu = false;
                 cout<<endl;
                 break;
+            }
             default:{
-                cout<<"Invalid option..."<<endl;
-                waitForEnter();
+                // Display error message of invalid choice
+                displayError("Error: Invalid choice...");
                 break;}
         }
     }
@@ -63,15 +69,13 @@ void createPark(VacationPark& vp) {
     
     // Use regex to validate name
     if (!regex_match(name, nameRegex)) {
-        cout << "Invalid name" << endl;
-        waitForEnter();
+        displayError("Error: Invalid name");
         return;}
     
     // Check for duplicated name
     bool isDuplicated = ownerAPI::findPark(vp.getParks(), name);
     if(isDuplicated) {
-        cout << "Duplicated name" << endl;
-        waitForEnter();
+        displayError("Error: Duplicated name");
         return;}
     
     string address;
@@ -81,8 +85,7 @@ void createPark(VacationPark& vp) {
     
     // Use regex to validate address
     if (!regex_match(address, addressRegex)){
-        cout << "Invalid address" << endl;
-        waitForEnter();
+        displayError("Error: Invalid address");
         return;}
     
     // Map of the luxuryLevel for an accomodation
@@ -117,7 +120,7 @@ void createPark(VacationPark& vp) {
 
 void editPark(VacationPark& vp) {
     // Ask the park to be edited
-    Park* p = getPark(vp,"Select the park to edit: ");
+    Park* p = getPark(vp,"Select the park to edit: ", nullptr, true);
     // If no correct park was selected
     if(p==nullptr)
         return;
@@ -166,12 +169,11 @@ void editParkService(Park* park) {
     for(size_t i=0;i<count;i++){
         cout<<servicePrompts[i];
         int choice = getUserChoice(0, 1);
-        if(choice!=-1){
-            input[i] = (bool)choice;
-        } else {
+        if(choice==-1){
             cout << "Invalid choice" << endl;
             waitForEnter(true);
             return;}
+        input[i] = (bool)choice;
     }
     
     ownerAPI::updateParkServices(park, input);
@@ -180,12 +182,12 @@ void editParkService(Park* park) {
 }
 
 
-Park* getPark(VacationPark& vp, string displayText, int* index) {
+Park* getPark(VacationPark& vp, string displayText, int* index, bool editMode) {
     if(!existParks(vp)) return nullptr;
     cout << displayText << endl;
-    int count{1};
+    int count{0};
     for(auto& p: vp.getParks()){
-        cout << tabSpace() << count << ". " << p->getName() << endl;
+        cout << tabSpace() << count+1 << ". " << p->getName() << endl;
         count++;
     }
     cout << "Enter the number of the park: ";
@@ -198,19 +200,23 @@ Park* getPark(VacationPark& vp, string displayText, int* index) {
     }
     if(index!=nullptr)
         *index = choice-1;
-    return ownerAPI::getPark(vp, choice-1);
+    // Get the park
+    Park* p = ownerAPI::getPark(vp, choice-1, editMode);
+    if(p==nullptr)
+        displayError("Error: Park has accomodations booked...");
+    return p;
 }
 
 
 void deletePark(VacationPark& vp){
     // Ask the park to be deleted
     int index{-1};
-    getPark(vp, "Select the park to delete: ", &index);
+    getPark(vp, "Select the park to delete: ", &index, true);
     if(index==-1)
         return;
-    ownerAPI::deletePark(index, vp) ? cout<<"Park deleted successfully!"<<endl:
-    cout<<"Error: This park can not be deleted because it has booked accomodations..."<<endl;
-    waitForEnter();
+    if(ownerAPI::deletePark(index, vp)){
+        cout<<"Park deleted successfully!"<<endl;
+        waitForEnter();}
 }
 
 
@@ -226,7 +232,7 @@ void createAccomodation(VacationPark& vp){
         return;
     
     // Verify created
-    bool isCreated = ownerAPI::createAccomodation(p->getAcccomodations(), commonArgs, type);
+    bool isCreated = ownerAPI::createAccomodation(p->getAccomodations(), commonArgs, type);
     // Check if it was created
     isCreated ? cout<<"HotelRoom created successfully!"<<endl:
     cout<<"There was an error..."<<endl;
@@ -257,7 +263,7 @@ bool existAccomodations(VacationPark& vp){
     bool existAccomodations = false;
     for(auto const& p : vp.getParks()){
         // If encounter one park that has accomodations break
-        if(p->getAcccomodations().size()!=0){
+        if(p->getAccomodations().size()!=0){
             existAccomodations = true;
             break;}}
     if(!existAccomodations){
@@ -283,7 +289,7 @@ Accomodation* getAccomodation(VacationPark& vp, string displayText, ownerAPI::AC
     string accomodationType{};
     for(const auto& p: vp.getParks()){
         int localAccomodationCount{1};
-        for(auto const& a : p->getAcccomodations()){
+        for(auto const& a : p->getAccomodations()){
             // Get type of accomodation
             accomodationType = (typeid(*a)==typeid(HotelRoom)) ?
             accomodationType = "Hotel Room" :
@@ -327,7 +333,9 @@ void editAccomodation(VacationPark& vp){
     Accomodation* acc = getAccomodation(vp, "Select the number of the accomodation to edit: ", &type);
     if(acc==nullptr)
         return;
-    
+    if(acc->isReserved()){
+        displayError("Error: Accomodation is reserved, can't be edited");
+        return;}
     map<int, void*>* commonArgs = getAccomodationDetails(vp, &type);
     if(commonArgs==nullptr)
         return;
@@ -357,7 +365,9 @@ void deleteAccomodation(VacationPark& vp){
     Accomodation* acc = getAccomodation(vp, "Select the number of the accomodation to delete: ", nullptr, &parkIndex, &accomodationIndex);
     if(acc==nullptr)
         return;
-    
+    if(acc->isReserved()){
+        displayError("Error: Accomodation is reserved, can't be deleted");
+        return;}
     // Verify deleted
     bool isDeleted = ownerAPI::deleteAccomodation(parkIndex, accomodationIndex, vp);
     // Check if it was deleted
@@ -368,22 +378,16 @@ void deleteAccomodation(VacationPark& vp){
 
 map<int, void*>* getAccomodationDetails(VacationPark& vp, ownerAPI::ACC_TYPE* type, ownerAPI::ACC_TYPE* typeRet){
     // Ask the owner for the id of the accomodation
-    cout << "Enter the ID of the accomodation: ";
+    cout << "Enter the ID of the accomodation (positive number): ";
     int id = getUserChoice(0);
     
-    // Check valid answer
-    if (id == -1)
-    {cout << "Invalid ID" << endl;
-        waitForEnter();
-        return nullptr;}
+    // Check valid answer, if not return nullptr
+    if(checkError(id, -1, "Error: Invalid ID")) return nullptr;
     
     // Check for duplicated name
     bool isDuplicated = ownerAPI::findAccomodation(vp.getParks(), id);
-    if(isDuplicated) {
-        cout << "Duplicated ID" << endl;
-        waitForEnter();
-        return nullptr;
-    }
+    // Check valid answer, if not return nullptr
+    if(checkError(isDuplicated, true, "Error: Duplicated ID")) return nullptr;
     
     // Map of the common prompts for an accomodation
     map<int, tuple<type_index, string>> accomodationPrompts {
@@ -407,13 +411,9 @@ map<int, void*>* getAccomodationDetails(VacationPark& vp, ownerAPI::ACC_TYPE* ty
         typeAccomodation = getUserChoice(1,2);
         
         // Check valid answer
-        if (typeAccomodation == -1)
-        {cout << "Invalid ID" << endl;
-            waitForEnter();
-            return nullptr;}
-    } else{
+        if(checkError(typeAccomodation, -1, "Error: Invalid type...")) return nullptr;
+    }   else
         typeAccomodation = (int)(*type);
-    }
     
     // Hotelroom type
     int index{0};
@@ -539,7 +539,8 @@ void loginCustomerMenu(VacationPark& vp){
             // If choice is invalid
             if(choice == -1){
                 cout<<"Invalid choice..."<<endl;
-                waitForEnter();}
+                waitForEnter();
+                return;}
             if(choice==choices[1]) return; // User want to leave
             // Create a map of functions that will handle the user's choice
             std::map<int, std::function<void()>> funcChoices = {
@@ -652,7 +653,7 @@ void createBooking(VacationPark& vp, Customer* customer, bool employeeMode) {
         id = generateBookingID(customer);
     
     // Create the booking without any services
-    bool isCreated = customerAPI::createBooking(vp, customer, accomodation, id, false, false, false);
+    bool isCreated = customerAPI::createBooking(vp, customer, accomodation, id, false, false, false, false);
     string pronoun = employeeMode ? "The": "Your";
     isCreated ? cout<<pronoun<<" new booking with ID "<< id << " was created successfully!" << endl:
     cout<<"There was an error trying to create" << convToLower(pronoun) << " booking...";
@@ -660,6 +661,8 @@ void createBooking(VacationPark& vp, Customer* customer, bool employeeMode) {
 }
 
 Accomodation* getAccomodationFiltered(VacationPark& vp, Park* park, Booking* booking, bool employeeMode){
+    // If there exist a previous accomodation booked and park is needed to be restricted to the same park
+    // that the previous accomodation is in
     if(park!=nullptr){
         cout<< "INFO: There are " << booking->getAccomodations().size() << " accomodations booked. " <<endl;
         cout<< "Limiting filter to accomodations of park "<<park->getName()<<"..."<<endl;}
@@ -668,11 +671,9 @@ Accomodation* getAccomodationFiltered(VacationPark& vp, Park* park, Booking* boo
     << "1. HotelRoom"<<endl<<"2. Cabin"<<endl;
     // If an employee is accessing this function
     employeeMode ? cout<<"Enter the choice: " : cout<<"Enter your choice: ";
+    // Get the user choice for the accomodation type
     int typeAccomodation = getUserChoice(1,2);
-    if(typeAccomodation==-1){
-        cout<<"Invalid answer..."<<endl;
-        waitForEnter();
-        return nullptr;}
+    if(checkError(typeAccomodation, -1, "Error: Invalid answer...")) return nullptr;
     
     // Map of the filter prompts
     map<int, tuple<type_index, string>> filterPrompts {
@@ -680,16 +681,19 @@ Accomodation* getAccomodationFiltered(VacationPark& vp, Park* park, Booking* boo
         {3, {typeid(bool), "Has BBQ? (0 no, 1 yes): "}},
         {4, {typeid(bool), "Has surround system? (0 no, 1 yes): "}},
         {5, {typeid(bool), "Has breakfast service? (0 no, 1 yes): "}},
-        {6, {typeid(bool), "Has cleaning service? (0 no, 1 yes): "}},
-        {7, {typeid(string), "Accomodation kind (text): "}},
+        {6, {typeid(bool), "Has cleaning service? (0 no, 1 yes): "}}
     };
-    // Get the inputs of all the filter prompts
+    // Get the inputs for all the filter prompts
     map<int, void*>* filterArgs = general::userPrompt(filterPrompts);
+    // If one filter failed a nullptr is returned
     if(filterArgs==nullptr)
         return nullptr;
+    // Add the type of accomodation to the filter arguments
     filterArgs->emplace(1, new Value<int>{typeAccomodation});
+    // Filter the accomodations
     map<int, tuple<Accomodation*, Park*>>* accFiltered = filterAccomodations(filterArgs, vp, park);
     delete filterArgs; // Free the memory
+    // If there are no accomodations that match the filters
     if(accFiltered->empty()){
         employeeMode ? cout<<"No accomodations have match the filters provided..."<<endl:
         cout<<"No accomodations have match your filters..."<<endl;
@@ -700,7 +704,9 @@ Accomodation* getAccomodationFiltered(VacationPark& vp, Park* park, Booking* boo
     cout<<"\nHere are the accomodations that matched your filters"<<endl;
     // Display the filtered accomodations
     string typeAccStr{ (typeAccomodation==1) ? "hotel room":"cabin" };
+    // Iterator for the map
     map<int, tuple<Accomodation*, Park*>>::iterator it = accFiltered->begin();
+    // Iterate through the map while displaying the accomodations
     while(it != accFiltered->end()){
         auto accomodation = get<0>(it->second);
         auto park = get<1>(it->second);
@@ -708,13 +714,11 @@ Accomodation* getAccomodationFiltered(VacationPark& vp, Park* park, Booking* boo
         ") with ID " << accomodation->getId() << " from park " << park->getName() << endl;
         ++it;
     }
+    // Get the user choice for the accomodation
     employeeMode ? cout<<"Enter the choice: " : cout<<"Enter your choice: ";
     
     int choice = getUserChoice(1, (int)accFiltered->size());
-    if(choice==-1){
-        cout<<"Invalid choice..."<<endl;
-        waitForEnter();
-        return nullptr;}
+    if(checkError(choice, -1, "Error: Invalid answer...")) return nullptr;
     // Return the accomodation selected by the user
     auto acc = get<0>(accFiltered->at(choice));
     delete accFiltered;
@@ -726,14 +730,15 @@ void editBookings(VacationPark& vp, Customer* customer, bool employeeMode){
     
     Booking* booking = getBookings(vp, customer, "\n---Select the booking to edit--- ");
     if(booking==nullptr) return; // Check that user got a booking to edit
-    
+    // Menu loop
     while (true) {
+        // Display the manu and get range of choices
         int(&choices)[2]{menus::displayBookingMenu(booking->getId())};
+        // Get the user choice
         int choice = getUserChoice(choices[0], choices[1]);
-        if(choice == -1){
-            cout<<"Invalid choice"<<endl;
-            waitForEnter();}
-        if(choice==choices[1]) break; // User want to leave
+        // If the user choice is invalid, ask again
+        if(checkError(choice, -1, "Error: Invalid answer...")) continue;
+        if(choice==choices[1]) break; // User want to leave, break the loop
         // Create a map of functions that will handle the user's choice
         std::map<int, std::function<void()>> funcChoices = {
             {1, [&]() { addAccomodation(booking, vp, employeeMode); }},
@@ -758,7 +763,7 @@ void addAccomodation(Booking* booking, VacationPark& vp, bool employeeMode){
         if(accomodation==nullptr)
             return;
         // Update the booking with the new accomodation
-        bool isUpdated = customerAPI::updateBooking(booking, accomodation);
+        bool isUpdated = customerAPI::updateBooking(vp, booking, accomodation, true);
         isUpdated ? cout<<"Booking with ID "<< booking->getId() << " was updated successfully!" << endl:
         cout<<"There was an error trying to update your booking...";}
     else{ // Otherwise
@@ -771,7 +776,8 @@ void addAccomodation(Booking* booking, VacationPark& vp, bool employeeMode){
         Accomodation* accomodation = getAccomodationFiltered(vp, park, booking, employeeMode);
         if(accomodation==nullptr) return;
         // Update the booking with the new accomodation
-        bool isUpdated = customerAPI::updateBooking(booking, accomodation);
+        bool isUpdated = customerAPI::updateBooking(vp, booking, accomodation);
+        // Display feedback to the user
         isUpdated ? cout<<"Booking with ID "<< booking->getId() << " was updated successfully!" << endl:
         cout<<"There was an error trying to update your booking...";}
     waitForEnter();
@@ -796,7 +802,7 @@ void removeAccomodation(Booking* booking, VacationPark& vp, bool employeeMode){
         cout<<"Invalid choice..."<<endl;
         waitForEnter();
         return;}
-    bool isDeleted = customerAPI::removeAccFromBooking(booking, booking->getAccomodations()[choice-1]);
+    bool isDeleted = customerAPI::removeAccFromBooking(booking, booking->getAccomodations()[choice-1], vp);
     isDeleted ? cout<<"Accomodation removed successfully!"<<endl:
     cout<<"There was an error..."<<endl;
     waitForEnter();
@@ -846,7 +852,6 @@ map<int, tuple<Accomodation*, Park*>>* filterAccomodations(map<int, void*>* args
     bool hasSurroundSystem = (static_cast<Value<bool>*>(args->at(4)))->value;
     bool hasBreakfastService = (static_cast<Value<bool>*>(args->at(5)))->value;
     bool hasCleaningService = (static_cast<Value<bool>*>(args->at(6)))->value;
-    string accomodationKind = (static_cast<Value<string>*>(args->at(7)))->value;
     
     map<int, tuple<Accomodation*, Park*>>* filteredAcc = new map<int, tuple<Accomodation*, Park*>>{};
     int counter{1};
@@ -856,7 +861,7 @@ map<int, tuple<Accomodation*, Park*>>* filterAccomodations(map<int, void*>* args
             // If the name of the park is different,
             if(!(park->getName()==p->getName()))
                 continue; // skip it
-        for(auto const a : p->getAcccomodations()){
+        for(auto const a : p->getAccomodations()){
             // If accomodations is reserved
             if(a->isReserved()) continue; // skip it
             // If Customer is not looking for this room
@@ -869,9 +874,8 @@ map<int, tuple<Accomodation*, Park*>>* filterAccomodations(map<int, void*>* args
             bool f3 = a->getLuxuryLevel()->getSurroundSystem() == hasSurroundSystem;
             bool f4 = a->getLuxuryLevel()->getBreakfastService() == hasBreakfastService;
             bool f5 = a->getLuxuryLevel()->getCleaningService() == hasCleaningService;
-            bool f6 = a->getLuxuryLevel()->getAccomodationKind() == accomodationKind;
             // If all filters are meeted
-            if(f1&&f2&&f3&&f4&&f5&&f6)
+            if(f1&&f2&&f3&&f4&&f5)
                 filteredAcc->insert( {counter++, make_tuple(a,p.get())} );
         }
     }
@@ -922,22 +926,6 @@ void bookServices(Booking* booking, VacationPark& vp, bool employeeMode){
     waitForEnter();
     bool passes[4]{false};
     int choice{0};
-    if(hasSSP){
-        cout<<"Book swimming pass service? ";
-        choice = getUserChoice(0, 1);
-        if(choice==-1){
-            cout<<"Invalid answer..."<<endl;
-            waitForEnter();
-            return;}
-        passes[0]=choice;}
-    if(hasSI){
-        cout<<"Book sports pass service? ";
-        choice = getUserChoice(0, 1);
-        if(choice==-1){
-            cout<<"Invalid answer..."<<endl;
-            waitForEnter();
-            return;}
-        passes[1]=choice;}
     if(hasBA || hasWB || hasCP){
         cout<<"Book activity pass service? ";
         choice = getUserChoice(0, 1);
@@ -946,6 +934,14 @@ void bookServices(Booking* booking, VacationPark& vp, bool employeeMode){
             waitForEnter();
             return;}
         passes[2]=choice;}
+    if(hasSI){
+        cout<<"Book sports pass service? ";
+        choice = getUserChoice(0, 1);
+        if(choice==-1){
+            cout<<"Invalid answer..."<<endl;
+            waitForEnter();
+            return;}
+        passes[1]=choice;}
     if(hasBR){
         cout<<"Book bicycle rent pass service? ";
         choice = getUserChoice(0, 1);
@@ -954,6 +950,14 @@ void bookServices(Booking* booking, VacationPark& vp, bool employeeMode){
             waitForEnter();
             return;}
         passes[3]=choice;}
+    if(hasSSP){
+        cout<<"Book swimming pass service? ";
+        choice = getUserChoice(0, 1);
+        if(choice==-1){
+            cout<<"Invalid answer..."<<endl;
+            waitForEnter();
+            return;}
+        passes[0]=choice;}
     
     bool hasBookedServices = customerAPI::setBookingServices(booking, passes);
     hasBookedServices ? cout<<"Services booked successfully!"<<endl:
@@ -980,10 +984,8 @@ void accessAsEmployee(VacationPark& vp){
         int(&choices)[2]{menus::displayEmployeeMenu()};
         // Get the user's choice
         int choice = getUserChoice(choices[0], choices[1]);
-        // If choice is invalid
-        if(choice == -1){
-            cout<<"Invalid choice..."<<endl;
-            waitForEnter();}
+        // If choice is invalid, return
+        if(checkError(choice, -1, "Invalid choice!")) return;
         if(choice==choices[1]) break; // User want to leave
         // Create a map of functions that will handle the user's choice
         std::map<int, std::function<void()>> funcChoices = {
@@ -993,6 +995,7 @@ void accessAsEmployee(VacationPark& vp){
             {4, [&]() { createBooking(vp); }},
             {5, [&]() { editBooking(vp); }},
             {6, [&]() { deleteBooking(vp); }},
+            {7, [&]() { owner::editAccomodation(vp); }},
         };
         // Handle the user's choice
         if (funcChoices.count(choice) > 0) {
@@ -1002,7 +1005,8 @@ void accessAsEmployee(VacationPark& vp){
 
 
 Customer* getCustomer(VacationPark& vp, string displayText, int* index){
-    cout<<displayText<<endl;
+    cout<<displayText<<endl; // Show information text
+    // Counter for the customers, starting at 1
     int customerCount{1};
     // Show all the customers
     for(auto& c : vp.getCustomers()){
@@ -1010,13 +1014,14 @@ Customer* getCustomer(VacationPark& vp, string displayText, int* index){
         customerCount++;
     }
     cout<<"Enter your selection: ";
+    // Get the user's choice
     int choice = getUserChoice(1, customerCount);
-    if(choice==-1){
-        cout<<"Error: Invalid selection..."<<endl;
-        return nullptr;}
+    // If the choice is invalid, return nullptr
+    if(checkError(choice, -1, "Error: Invalid choice...")) return nullptr;
     // If the index is wanted
     if(index!=nullptr)
-        *index = choice-1;
+        *index = choice-1; // Set it
+    // Return the customer at the index -1
     return vp.getCustomers()[choice-1].get();
 }
 
@@ -1109,56 +1114,138 @@ template<typename T, typename U> int editFeature(string textDisplay, T object, U
 }
 
 map<int, void*>* userPrompt(map<int, tuple<type_index, string>>& prompts){
+    // Map that holds the arguments to be collected
     map<int, void*>* args = new map<int, void*>();
-    uint counter=0;
+    uint counter=0; // Counter being used to keep track of the order of the arguments
+    // Iterate through the prompts given
     for(auto it=prompts.cbegin(); it!=prompts.cend();it++){
-        counter=it->first;
+        counter=it->first; // Get the counter from the prompts
         cout<<get<1>(it->second); // Print the text
         // Get the type of the key
         const type_index& typeInd = get<0>(it->second);
-        int answer{};
-        // If the type is an integer, means that we need to catch a positive integer
+        int answer{}; // Choice of the user
+        // If the type is an integer, means that a integer value is expected
         if(typeInd==typeid(int)){
-            answer = getUserChoice(0);
-            if (answer==-1){
-                cout << "Invalid answer..." << endl;
-                waitForEnter();
-                return nullptr;}
+            answer = getUserChoice(0); // Get the choice of the user
+            // Check if the answer is valid, otherwise return nullptr
+            if(checkError(answer, -1, "Error: Invalid answer...")) return nullptr;
             // Create the wrapper container that will contain the value itself
             auto value = new Value<int>{answer};
             // Insert the type of the value and the value itself,
             // a temporary object will be created and then copied into the container
             args->insert({ counter, value });
         }
-        // If the type is a boolean, means that we need to catch a boolean value
+        // If the type is a boolean, means that a boolean value is expected
         if(typeInd==typeid(bool)){
-            answer = getUserChoice(0,1);
-            if (answer==-1){
-                cout << "Invalid answer..." << endl;
-                waitForEnter();
-                return nullptr;}
+            answer = getUserChoice(0,1); // Get the choice of the user
+            // Check if the answer is valid, otherwise return nullptr
+            if(checkError(answer, -1, "Error: Invalid answer...")) return nullptr;
             // Create the wrapper container that will contain the value itself
             Value<bool>* value = new Value<bool>{(bool)answer};
-            // Emplace will create the object direct in place
+            // Emplace the object direct in place
             args->emplace(counter, value);
         }
-        // If the type is a string, means that we need to catch a string value
+        // If the type is a string, means that a string value is expected
         if(typeInd==typeid(string)){
-            string answer;
-            getline(cin, answer);
-            
+            string answer; // String answer of the user
+            getline(cin, answer); // Get the answer of the user
+            // Check if the answer is valid, otherwise return nullptr
             if (!regex_match(answer, stringRegex)){
-                cout << "Invalid answer..." << endl;
-                waitForEnter();
+                displayError("Error: Invalid input...");
                 return nullptr;}
             // Create the wrapper container that will contain the value itself
             auto value = new Value<string>{(string)answer};
             // Emplace will create the object direct in place
             args->emplace(counter, value);
         }
-        counter++;
+        counter++; // Increment the counter
     }
     return args;
+}
+
+void viewData(VacationPark& vp){
+    // Check if there are any customers created
+    if(vp.getCustomers().empty()){
+        cout<<"\n\nThere are no customers created..."<<endl;
+    } else {
+        cout<<"\n\n---Customers("<<vp.getCustomers().size()<<")---"<<endl<<endl;
+        // Costumers data
+        for(auto const& customer: vp.getCustomers()){
+            cout<<setw(16)<<left<<"Name"<<setw(24)<<left<<"Address"<<setw(20)<<left<<"Email"<<endl;
+            // Print customer data using columns
+            cout<<setw(16)<<left<<customer->getName();
+            cout<<setw(24)<<left<<customer->getAddress();
+            cout<<setw(20)<<left<<customer->getMail()<<endl;
+        }
+    }
+    waitForEnter(); // Wait before showing parks data
+    // Check if there are any parks created
+    if(vp.getParks().empty()){
+        cout<<"\n\nThere are no park areas created..."<<endl;
+    } else{
+        cout<<"\n\n---Parks("<<vp.getParks().size()<<")---"<<endl<<endl;
+        // Print header
+        for(auto const& park: vp.getParks()){
+            cout<<setw(16)<<left<<"Name"<<setw(24)<<left<<"Address"<<setw(10)<<left<<"References"<<endl;
+            cout<<setw(16)<<left<<park->getName();
+            cout<<setw(24)<<left<<park->getAddress();
+            cout<<setw(10)<<left<<park->getReferences()<<endl;
+            // Print the park service
+            cout<<setw(15)<<left<<"Servicess: "<<endl;
+            Service service = *(park->getService());
+            cout<<service<<endl;
+
+            // Print the park's accommodations
+            cout<<setw(15)<<left<<"Accommodations("<< park->getAccomodations().size()<<"): "<<endl;
+            for(Accomodation* acc:park->getAccomodations()){
+                // Check type of accommodation
+                string stringToPrint;
+                if(typeid(HotelRoom)==typeid(*acc)){
+                    stringToPrint = "\tHotel Room:\n";
+                    stringToPrint += ((HotelRoom*)acc)->toString();
+                } else {
+                    stringToPrint = "\tCabin\n";
+                    stringToPrint += ((Cabin*)acc)->toString();
+                }
+                cout<<left<<stringToPrint<<endl;
+            }
+        }
+    }
+    waitForEnter(); // Wait before showing bookings data
+    // Check if there are any bookings created
+    if(vp.getBookings().empty()){
+        cout<<"\n\nThere are no bookings created..."<<endl;
+    } else{
+        cout<<"\n\n---Bookings("<<vp.getBookings().size()<<")---"<<endl<<endl;
+        // Print header
+        for(auto const& b: vp.getBookings()){
+            string activityPass = b->getActivityPass()?"Yes":"No";
+            string sportsPass = b->getSportsPass()?"Yes":"No";
+            string bicycleRentPass = b->getBicycleRentPass()?"Yes":"No";
+            string swimmingPass = b->getSwimmingPass()?"Yes":"No";
+            // Print header
+            cout<<right<<setw(8)<<"ID"<<setw(16)<<"Customer"<<setw(16)<<"Activity Pass"<<
+            setw(14)<<"Sports pass"<<setw(20)<<"Bicycle rent pass"<<setw(16)<<"Swimming Pass"<<endl;
+            // Print booking data
+            cout<<right<<setw(8)<<b->getId()<<setw(16)<<b->getCustomer()->getName()<<setw(16)<<activityPass<<
+            setw(14)<<sportsPass<<setw(20)<<bicycleRentPass<<setw(16)<<swimmingPass<<endl;
+
+            // Get accomodations of the booking
+            for(auto const& acc: b->getAccomodations()){
+                // Check type of accommodation
+                string stringToPrint;
+                if(typeid(HotelRoom)==typeid(*acc)){
+                    stringToPrint = "\tHotel Room:\n";
+                    stringToPrint += ((HotelRoom*)acc)->toString();
+                } else {
+                    stringToPrint = "\tCabin\n";
+                    stringToPrint += ((Cabin*)acc)->toString();
+                }
+                cout<<left<<stringToPrint<<endl;
+            }
+        }
+    }
+    waitForEnter(); // Wait before exiting
 }
 
 /// General namespace end
@@ -1193,8 +1280,7 @@ string& getSaveName(int* countSaves){
     // Get the user's choice
     int choice = getUserChoice(1, (int)saves.size());
     if(choice==-1){
-        cout<<"Invalid choice..."<<endl;
-        waitForEnter();
+        displayError("Error: Invalid choice...");
         return returnStr;}
     // If the user's choice is valid, save that into the static string variable
     returnStr = saves[choice - 1]; // Return it
@@ -1211,8 +1297,7 @@ void fileManagement(VacationPark& vp) {
         // Get user choice
         int choice = getUserChoice(choices[0], choices[1]);
         if(choice==-1){
-            cout<<"Invalid choice..."<<endl;
-            waitForEnter();
+            displayError("Error: Invalid choice...");
             continue;}
         if(choice==choices[1]) return;
         
@@ -1231,8 +1316,7 @@ void fileManagement(VacationPark& vp) {
             // Load information
             string saveName = getSaveName(&countSize);
             if(countSize==0){
-                cout<<"Error: There are no saves created..."<<endl;
-                waitForEnter();
+                displayError("Error: There are no saves created...");
                 continue;}
             if(saveName=="")
                 continue;
@@ -1244,8 +1328,7 @@ void fileManagement(VacationPark& vp) {
             // Delete information
             string saveName = getSaveName(&countSize);
             if(countSize==0){
-                cout<<"Error: There are no saves created..."<<endl;
-                waitForEnter();
+                displayError("Error: There are no saves created...");
                 continue;}
             if(saveName=="")
                 continue;

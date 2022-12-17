@@ -14,7 +14,7 @@ int (&displayFileManagementMenu())[2]{
     cout << tabSpace() << "1. Store current data"<<endl;
     cout << tabSpace() << "2. Load data"<<endl;
     cout << tabSpace() << "3. Delete data"<<endl;
-    cout << tabSpace() << "4. Exit"<<endl;
+    cout << tabSpace() << "4. Go back"<<endl;
     cout << tabSpace() << "Enter your choice: ";
     static int choicesRange[2]{1,4};
     return choicesRange;
@@ -55,10 +55,12 @@ int (&displayEmployeeMenu())[2] {
     cout << tabSpace() << tabSpace() << tabSpace() << tabSpace();
     cout << "6. Delete booking" << endl;
     cout << tabSpace() << tabSpace() << tabSpace() << tabSpace();
-    cout << "7. Go back to main menu" << endl;
+    cout << "7. Edit accomodation" << endl;
+    cout << tabSpace() << tabSpace() << tabSpace() << tabSpace();
+    cout << "8. Go back" << endl;
     cout << tabSpace() << tabSpace() << tabSpace() << tabSpace();
     cout << "Enter your choice: ";
-    static int choicesRange[2]{1,7};
+    static int choicesRange[2]{1,8};
     return choicesRange;
 }
 
@@ -70,7 +72,7 @@ int (&displayBookingMenu(string bookingID))[2] {
     cout << tabSpace() << tabSpace() <<"1. Add accomodations to bookings" <<endl;
     cout << tabSpace() << tabSpace() <<"2. Remove accomodations from bookings" <<endl;
     cout << tabSpace() << tabSpace() <<"3. Book park services" <<endl;
-    cout << tabSpace() << tabSpace() <<"4. Exit"<<endl;
+    cout << tabSpace() << tabSpace() <<"4. Go back"<<endl;
     cout << tabSpace() << tabSpace() << "Enter your choice: ";
     static int choicesRange[2]{1,4};
     return choicesRange;
@@ -88,7 +90,9 @@ void displayMainMenu() {
     cout << tabSpace();
     cout << "4. File management" << endl;
     cout << tabSpace();
-    cout << "5. Exit" << endl;
+    cout << "5. View data" << endl;
+    cout << tabSpace();
+    cout << "6. Exit" << endl;
     cout << tabSpace();
     cout << "Enter your choice: ";
 }
@@ -102,7 +106,7 @@ void displayCustomerMenu() {
     cout << tabSpace() << tabSpace() << tabSpace();
     cout << "2. Login" << endl;
     cout << tabSpace() << tabSpace() << tabSpace();
-    cout << "3. Back" << endl;
+    cout << "3. Go back" << endl;
     cout << tabSpace() << tabSpace() << tabSpace();
     cout << "Enter your choice: ";
 }
@@ -126,7 +130,7 @@ int (&displayOwnerMenu())[2] {
     cout << tabSpace() << tabSpace() << tabSpace();
     cout << "6. Delete Accomodation" << endl;
     cout << tabSpace() << tabSpace() << tabSpace();
-    cout << "7. Go back to main menu" << endl;
+    cout << "7. Go back" << endl;
     cout << tabSpace() << tabSpace() << tabSpace();
     cout << "Enter your choice: ";
     static int choicesRange[2]{1,7};
@@ -138,7 +142,7 @@ int (&parkUpdateMenu())[2]{
     cout << tabSpace() << "1. Update name"<<endl;
     cout << tabSpace() << "2. Update address"<<endl;
     cout << tabSpace() << "3. Update services"<<endl;
-    cout << tabSpace() << "4. Exit"<<endl;
+    cout << tabSpace() << "4. Go back"<<endl;
     cout << tabSpace() << "Enter your choice: ";
     static int choicesRange[2]{1,4};
     return choicesRange;

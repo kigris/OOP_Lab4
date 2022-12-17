@@ -21,7 +21,6 @@ using std::string;
 
 class Customer{
 public:
-    Customer()=default;
     Customer(string name, string address, string mail);
     ~Customer();
     inline string getName() {return m_Name;}

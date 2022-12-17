@@ -23,17 +23,17 @@ bool storeCurrentInformation(VacationPark& vp, string& name) {
         }
       }
 
-    string customersFN = saveFolder+"/customers.dat";
+    string customersFN = saveFolder+"/customers.txt";
     
     // Open file for writing
-    ofstream customersFS{customersFN,ios::out|ios::binary};
+    ofstream customersFS{customersFN,ios::out};
     // Save all the customers
     if(customersFS.is_open()){
         // Write the size of all the customers
         size_t size = vp.getCustomers().size();
-        customersFS.write(reinterpret_cast<const char*>(&size), sizeof(size));
+        customersFS<<size<<endl;
         for(const auto& c : vp.getCustomers()){
-            customersFS.write(reinterpret_cast<const char*>(c.get()), sizeof(Customer));
+            customersFS<<c->getName()<<","<<c->getAddress()<<","<<c->getMail()<<endl;
         }
     } else{
         customersFS.close();
@@ -54,15 +54,15 @@ bool storeCurrentInformation(VacationPark& vp, string& name) {
         size_t size = vp.getParks().size();
         parksFS<<size<<endl;
         for(const auto& p : vp.getParks()){
-            // Write parks
-            parksFS<<p->getName()<<","<<p->getAddress()<<endl;
-            // Write services
+            // Write parks data
+            parksFS<<p->getName()<<","<<p->getReferences()<<","<<p->getAddress()<<endl;
+            // Write services data
             servicesFS.write(reinterpret_cast<const char*>(p.get()->getService()), sizeof(Service));
             // Write accomodations size
-            size_t accSize = p->getAcccomodations().size();
+            size_t accSize = p->getAccomodations().size();
             parksFS<<accSize<<endl;
             // Write accomodations
-            for(const auto& a : p->getAcccomodations()){
+            for(const auto& a : p->getAccomodations()){
                 // Get and write type of accomodation
                 int typeAcc = (typeid(HotelRoom)==typeid(*a)) ? 0 : 1;
                 accomodationsFS<<typeAcc<<endl;
@@ -149,15 +149,20 @@ bool storeCurrentInformation(VacationPark& vp, string& name) {
 
 bool loadData(VacationPark& vp, string fileSave){
     // Load customers
-    string customersFN = "data/"+fileSave+"/customers.dat";
-    ifstream customersFS{customersFN, ios::in|ios::binary};
+    string customersFN = "data/"+fileSave+"/customers.txt";
+    ifstream customersFS{customersFN, ios::in};
     if(customersFS.is_open()){
         vp.getCustomers().clear();
         size_t size;
-        customersFS.read(reinterpret_cast<char*>(&size), sizeof(size));
+        string customerLine;
+        getline(customersFS, customerLine);
+        size = stoi(customerLine);
         for(size_t i=0;i<size;i++){
-            unique_ptr<Customer> customer = make_unique<Customer>();
-            customersFS.read(reinterpret_cast<char*>(customer.get()), sizeof(Customer));
+            string name, address, mail;
+            getline(customersFS, name, ',');
+            getline(customersFS, address, ',');
+            getline(customersFS, mail);
+            unique_ptr<Customer> customer = make_unique<Customer>(name, address, mail);
             vp.getCustomers().emplace_back(move(customer));
         }
     } else{
@@ -181,15 +186,20 @@ bool loadData(VacationPark& vp, string fileSave){
         // Read the size first
         string parkLine;
         getline(parksFS, parkLine); // Read 1st line
-        size_t size = (size_t)atoi(parkLine.c_str()); // Get the size from 1st line
+        size_t size = stoi(parkLine.c_str()); // Get the size from 1st line
         vp.getParks().reserve(size); // Resize the parks vector
         for(size_t i=0;i<size;i++){
+            // Get the park's name, address, references and accomodations size
             string name, address;
+            int references;
             getline(parksFS, name, ',');
+            getline(parksFS, parkLine, ',');
+            references = atoi(parkLine.c_str());
             getline(parksFS, address);
             getline(parksFS, parkLine);
             size_t accSize = (size_t)atoi(parkLine.c_str());
             string accLine;
+            // Get the park's accomodations
             vector<Accomodation*> accomodations;
             for(size_t j=0;j<accSize;j++){
                 getline(accomodationsFS, accLine);
@@ -235,23 +245,31 @@ bool loadData(VacationPark& vp, string fileSave){
                 if(isReserved) acc->reserve();
                 accomodations.emplace_back(acc);
             }
+            // Get the park's services
             Service* service = new Service();
             servicesFS.read(reinterpret_cast<char*>(service), sizeof(Service));
+            // Create the park
             unique_ptr<Park> park = make_unique<Park>(name, address, service);
+            // Set the park's references and accomodations
+            park->setReferences(references);
             park->setAcccomodations(accomodations);
+            // Move the unique pointer of the park to the vector of the parks
             vp.getParks().emplace_back(move(park));
         }
     }else{
+        // If the file couldn't be opened, close all the files and return false
         parksFS.close();
         servicesFS.close();
         luxuryLevelFS.close();
         accomodationsFS.close();
         return false;}
+    // If the file was opened, close all the previously opened files
     parksFS.close();
     servicesFS.close();
     luxuryLevelFS.close();
     accomodationsFS.close();
     
+    // Read the bookings
     string bookingsFN{"data/"+fileSave+"/bookings.txt"};
     ifstream bookingsFS{bookingsFN, ios::out};
     if(bookingsFS.is_open()){
@@ -293,13 +311,15 @@ bool loadData(VacationPark& vp, string fileSave){
                 // And save it
                 accomodations.push_back(acc);
             }
-            unique_ptr<Booking> booking = make_unique<Booking>(ID, customer, accomodations, activityPass, bicycleRentPass, swimmingPass);
+            unique_ptr<Booking> booking = make_unique<Booking>(ID, customer, accomodations, activityPass, sportsPass, bicycleRentPass, swimmingPass);
             vp.getBookings().emplace_back(move(booking));
         }
     } else {
         bookingsFS.close();
         return false;}
     bookingsFS.close();
+
+    // Read the global ids and names of the classes
     string classGIDsFN("data/"+fileSave+"/classGIDs.dat");
     ifstream classGIDsFS{classGIDsFN, ios::binary};
     if(classGIDsFS.is_open()){
@@ -400,6 +420,7 @@ vector<string> getSaveNames(){
     return files;
 }
 
+// Linux version
 //bool deleteData(string saveName){
 //    const string parentFolderName="data";
 //    string fullPath = parentFolderName+"/"+saveName;
@@ -445,10 +466,10 @@ vector<string> getSaveNames(){
 
 bool deleteData(const std::string& saveName) {
     const std::string parentFolderName = "data";
-    std::string fullPath = parentFolderName + "/" + saveName;
+    string fullPath = parentFolderName + "/" + saveName;
 
     // Open the directory specified by dir_name
-    std::filesystem::directory_iterator dir(fullPath);
+    filesystem::directory_iterator dir(fullPath);
     // If the directory was successfully opened
     if (dir != std::filesystem::directory_iterator{}) {
         // Read the entries in the directory one by one

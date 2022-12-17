@@ -7,7 +7,6 @@
 
 #include "utils.hpp"
 
-// Get user choice
 int getUserChoice(int min) {
     // Get user input
     string input;
@@ -26,7 +25,6 @@ int getUserChoice(int min) {
     return -1;
 }
 
-// Get user choice
 int getUserChoice(int min, int max) {
     // Get user input
     string input;

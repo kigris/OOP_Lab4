@@ -20,8 +20,8 @@ using std::vector;
 class Booking{
 public:
     // Constructors, destructors
-    Booking(string id, Customer* customer, bool activityPass, bool bicycleRent, bool swimmingPass);
-    Booking(string id, Customer* customer, vector<Accomodation*> accomodations, bool activityPass, bool bicycleRent, bool swimmingPass);
+    Booking(string id, Customer* customer, bool activityPass, bool sportsPass, bool bicycleRent, bool swimmingPass);
+    Booking(string id, Customer* customer, vector<Accomodation*> accomodations, bool activityPass, bool sportsPass, bool bicycleRent, bool swimmingPass);
     ~Booking();
     
     inline string getId(){return m_ID;}

@@ -11,6 +11,9 @@
 vector<int> Accomodation::g_IDs = {};
 
 Accomodation::Accomodation(int id, int size, int numberPeople, bool bathroomWithBath, LuxuryLevel* luxuryLevel){
+#ifdef DEBUG
+    std::cout<<"DEBUG: Constructor - Accomodation with ID "<< id << ", g_IDS size: " << g_IDs.size() <<std::endl;
+#endif
     if(!setID(id)){
         throw std::invalid_argument("Duplicate ID");
     }
@@ -18,6 +21,9 @@ Accomodation::Accomodation(int id, int size, int numberPeople, bool bathroomWith
     setNumberPeople(numberPeople);
     setBathroomWithBath(bathroomWithBath);
     setLuxuryLevel(luxuryLevel);
+#ifdef DEBUG
+    std::cout<<"DEBUG: Constructor - Accomodation with ID "<< id << ", g_IDS size: " << g_IDs.size() <<std::endl;
+#endif
 }
 
 Accomodation::~Accomodation(){

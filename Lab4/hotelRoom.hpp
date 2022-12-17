@@ -18,7 +18,9 @@ class HotelRoom : public Accomodation {
 public:
     // Constructor
     HotelRoom(int id, int size, int numberPeople, bool bathroomWithBath, LuxuryLevel* luxuryLevel, int floor, string location, int numberOfBeds, bool childrenBed);
-    
+    // Destructor
+    ~HotelRoom();
+
     // Getters
     inline const int getFloor() const {return m_Floor;}
     inline string getLocation() const {return m_Location;}
@@ -32,7 +34,7 @@ public:
     void setChildrenBed(bool childrenBed);
     
     // Overriden function
-    void toString() override;
+    const string toString() const override;
 private:
     int m_Floor;
     string m_Location;

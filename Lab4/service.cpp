@@ -8,12 +8,21 @@
 #include "service.hpp"
 
 Service::Service(bool hasSubtropicSwimmingPool, bool hasSportsInfrastructure, bool hasBowlingAlley, bool hasBicycleRent, bool hasChildrenParadise, bool hasWaterBikes){
+#ifdef DEBUG
+    std::cout << "Service constructor called" << std::endl;
+#endif
     setSubtropicSwimmingPool(hasSubtropicSwimmingPool);
     setSportsInfrastructure(hasSportsInfrastructure);
     setBowlingAlley(hasBowlingAlley);
     setBicycleRent(hasBicycleRent);
     setChildrenParadise(hasChildrenParadise);
     setWaterBikes(hasWaterBikes);
+}
+
+Service::~Service(){
+#ifdef DEBUG
+    std::cout << "Service destructor called" << std::endl;
+#endif
 }
 
 void Service::setSubtropicSwimmingPool(bool has){
@@ -38,4 +47,26 @@ void Service::setChildrenParadise(bool has){
 
 void Service::setWaterBikes(bool has){
     m_WaterBikes = has;
+}
+std::ostream& operator<<(std::ostream& out, const Service& service){
+    string result = "Service: ";
+    if (service.m_SubtropicSwimmingPool) {
+        result += "Subtropic swimming pool, ";
+    }
+    if (service.m_SportsInfrastructure) {
+        result += "Sports infrastructure, ";
+    }
+    if (service.m_BowlingAlley) {
+        result += "Bowling alley, ";
+    }
+    if (service.m_BicycleRent) {
+        result += "Bicycle rent, ";
+    }
+    if (service.m_ChildrenParadise) {
+        result += "Children paradise, ";
+    }
+    if (service.m_WaterBikes) {
+        result += "Water bikes";
+    }
+    return out << result;
 }
