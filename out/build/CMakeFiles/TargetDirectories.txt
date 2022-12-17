@@ -1,0 +1,3 @@
+/Volumes/PROTOS/Study/Computer_Engineering_Degree/Third_year/Object Oriented Programming/assignments/OOP_Lab4/out/build/CMakeFiles/oop_lab.dir
+/Volumes/PROTOS/Study/Computer_Engineering_Degree/Third_year/Object Oriented Programming/assignments/OOP_Lab4/out/build/CMakeFiles/edit_cache.dir
+/Volumes/PROTOS/Study/Computer_Engineering_Degree/Third_year/Object Oriented Programming/assignments/OOP_Lab4/out/build/CMakeFiles/rebuild_cache.dir

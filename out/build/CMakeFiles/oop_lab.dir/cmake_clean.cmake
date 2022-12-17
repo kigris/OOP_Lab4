@@ -1,0 +1,41 @@
+file(REMOVE_RECURSE
+  "CMakeFiles/oop_lab.dir/Lab4/UI.cpp.o"
+  "CMakeFiles/oop_lab.dir/Lab4/UI.cpp.o.d"
+  "CMakeFiles/oop_lab.dir/Lab4/accomodation.cpp.o"
+  "CMakeFiles/oop_lab.dir/Lab4/accomodation.cpp.o.d"
+  "CMakeFiles/oop_lab.dir/Lab4/booking.cpp.o"
+  "CMakeFiles/oop_lab.dir/Lab4/booking.cpp.o.d"
+  "CMakeFiles/oop_lab.dir/Lab4/cabin.cpp.o"
+  "CMakeFiles/oop_lab.dir/Lab4/cabin.cpp.o.d"
+  "CMakeFiles/oop_lab.dir/Lab4/customer.cpp.o"
+  "CMakeFiles/oop_lab.dir/Lab4/customer.cpp.o.d"
+  "CMakeFiles/oop_lab.dir/Lab4/fileManagement.cpp.o"
+  "CMakeFiles/oop_lab.dir/Lab4/fileManagement.cpp.o.d"
+  "CMakeFiles/oop_lab.dir/Lab4/hotelRoom.cpp.o"
+  "CMakeFiles/oop_lab.dir/Lab4/hotelRoom.cpp.o.d"
+  "CMakeFiles/oop_lab.dir/Lab4/luxuryLevel.cpp.o"
+  "CMakeFiles/oop_lab.dir/Lab4/luxuryLevel.cpp.o.d"
+  "CMakeFiles/oop_lab.dir/Lab4/main.cpp.o"
+  "CMakeFiles/oop_lab.dir/Lab4/main.cpp.o.d"
+  "CMakeFiles/oop_lab.dir/Lab4/menus.cpp.o"
+  "CMakeFiles/oop_lab.dir/Lab4/menus.cpp.o.d"
+  "CMakeFiles/oop_lab.dir/Lab4/park.cpp.o"
+  "CMakeFiles/oop_lab.dir/Lab4/park.cpp.o.d"
+  "CMakeFiles/oop_lab.dir/Lab4/service.cpp.o"
+  "CMakeFiles/oop_lab.dir/Lab4/service.cpp.o.d"
+  "CMakeFiles/oop_lab.dir/Lab4/unitTesting.cpp.o"
+  "CMakeFiles/oop_lab.dir/Lab4/unitTesting.cpp.o.d"
+  "CMakeFiles/oop_lab.dir/Lab4/utils.cpp.o"
+  "CMakeFiles/oop_lab.dir/Lab4/utils.cpp.o.d"
+  "CMakeFiles/oop_lab.dir/Lab4/vacationPark.cpp.o"
+  "CMakeFiles/oop_lab.dir/Lab4/vacationPark.cpp.o.d"
+  "CMakeFiles/oop_lab.dir/Lab4/vacationParkAPI.cpp.o"
+  "CMakeFiles/oop_lab.dir/Lab4/vacationParkAPI.cpp.o.d"
+  "oop_lab"
+  "oop_lab.pdb"
+)
+
+# Per-language clean rules from dependency scanning.
+foreach(lang CXX)
+  include(CMakeFiles/oop_lab.dir/cmake_clean_${lang}.cmake OPTIONAL)
+endforeach()
