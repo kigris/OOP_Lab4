@@ -53,7 +53,7 @@ const string HotelRoom::toString() const {
     <<" | " << std::setw(16) << "Number of people"<<" | "  << std::setw(18) << "Bathroom with bath"
     <<" | "<< std::setw(5) << "Floor"<<" | " << std::setw(14) << "Number of beds" <<" | "
     << std::setw(12) << "Children bed" << " | "<< std::setw(20) << "Location"<< " |"<<std::endl;
-    // Print data to be in the middle of each column and replace "|"" with " "
+    // Print data
     os << "| " << std::right << std::setw(3) << getId() <<" | " << std::setw(4) << getSize()
     <<" | " << std::setw(16) << getNumberPeople() <<" | "  <<std::setw(18) << bathroomWithBathString
     <<" | " << std::setw(5) << m_Floor <<" | " << std::setw(14) << m_NumberOfBeds

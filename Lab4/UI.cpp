@@ -1171,8 +1171,9 @@ void viewData(VacationPark& vp){
         cout<<"\n\n---Customers("<<vp.getCustomers().size()<<")---"<<endl<<endl;
         // Costumers data
         for(auto const& customer: vp.getCustomers()){
+            // Headers
             cout<<setw(16)<<left<<"Name"<<setw(24)<<left<<"Address"<<setw(20)<<left<<"Email"<<endl;
-            // Print customer data using columns
+            // Data formatted
             cout<<setw(16)<<left<<customer->getName();
             cout<<setw(24)<<left<<customer->getAddress();
             cout<<setw(20)<<left<<customer->getMail()<<endl;
@@ -1186,7 +1187,9 @@ void viewData(VacationPark& vp){
         cout<<"\n\n---Parks("<<vp.getParks().size()<<")---"<<endl<<endl;
         // Print header
         for(auto const& park: vp.getParks()){
+            // Headers
             cout<<setw(16)<<left<<"Name"<<setw(24)<<left<<"Address"<<setw(10)<<left<<"References"<<endl;
+            // Data formatted
             cout<<setw(16)<<left<<park->getName();
             cout<<setw(24)<<left<<park->getAddress();
             cout<<setw(10)<<left<<park->getReferences()<<endl;

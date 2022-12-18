@@ -10,7 +10,7 @@
 void testCreationAndDeletionParks(int numberOfParks) {
     cout<<"Creation and deletion of parks: Test begins..."<<endl;
     // This is for testing memory leaks
-    VacationPark vacationPark("Wonderland Park", "Avenue 52, 1020, Oklahoma, US");
+    VacationPark vacationPark("Wonderland Park", "Avenue 52, 1020, Oklahoma, US", 21);
     // Create n parks
     for(int i = 0; i<numberOfParks; i++){
         string name="peter"+to_string(i);

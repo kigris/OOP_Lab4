@@ -8,7 +8,7 @@
 #include "fileManagement.hpp"
 
 bool storeCurrentInformation(VacationPark& vp, string& name) {
-    // Generate unique file name
+    // Generate unique save folder name
     const string parentFolderName="data";
     string timeStamp = to_string(time(nullptr));
     name = timeStamp;
@@ -170,10 +170,12 @@ bool loadData(VacationPark& vp, string fileSave){
         return false;}
     customersFS.close();
     
+    // File names
     string parksFN = "data/"+fileSave+"/parks.txt";
     string servicesFN = "data/"+fileSave+"/services.dat";
     string luxuryLevelFN = "data/"+fileSave+"/luxuryLevel.dat";
     string accomodationsFN = "data/"+fileSave+"/accomodations.txt";
+    // File streams
     ifstream parksFS{parksFN, ios::in};
     ifstream servicesFS{servicesFN, ios::in|ios::binary};
     ifstream luxuryLevelFS{luxuryLevelFN, ios::in|ios::binary};
@@ -202,8 +204,10 @@ bool loadData(VacationPark& vp, string fileSave){
             // Get the park's accomodations
             vector<Accomodation*> accomodations;
             for(size_t j=0;j<accSize;j++){
+                // Get the accomodation's type
                 getline(accomodationsFS, accLine);
                 int typeAcc = atoi(accLine.c_str());
+                // Get the accomodation's data
                 getline(accomodationsFS, accLine);
                 stringstream accLineSs(accLine);
                 int id, size, numberOfPeople;
@@ -235,14 +239,18 @@ bool loadData(VacationPark& vp, string fileSave){
                     accLineSs.ignore();
                     accLineSs>>childrenBed;
                     accLineSs.ignore();
+                    // Create the hotel room
                     acc = new HotelRoom(id, size, numberOfPeople, bathroomWithBath, luxuryLevel, floor, location, numberOfBeds, childrenBed);
                 } else {
                     int bedrooms;
                     accLineSs>>bedrooms;
                     accLineSs.ignore();
+                    // Create the cabin
                     acc = new Cabin(id, size, numberOfPeople, bathroomWithBath, luxuryLevel, bedrooms);
                 }
+                // Reserve the accomodation if it was reserved
                 if(isReserved) acc->reserve();
+                // Add the accomodation to the vector of accomodations
                 accomodations.emplace_back(acc);
             }
             // Get the park's services

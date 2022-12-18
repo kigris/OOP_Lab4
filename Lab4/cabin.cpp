@@ -29,14 +29,12 @@ void Cabin::setBedrooms(int bedrooms) {
 
 const string Cabin::toString() const {
     ostringstream os;
-    // Bathroom with bath4
-    
     string bathroomWithBathString = getBathroomWithBath() ? "Yes" : "No";
     // Print headers
     os << "| " << std::right << std::setw(3) << "ID"<<" | " << std::setw(4) << "Size"
     <<" | " << std::setw(16) << "Number of people"<<" | "  << std::setw(18) << "Bathroom with bath"
     <<" | "<< std::setw(8) << "Bedrooms"<<" |"<<std::endl;
-    // Print data to be in the middle of each column and replace "|"" with " "
+    // Print data
     os << "| " << std::right << std::setw(3) << getId() <<" | " << std::setw(4) << getSize()
     <<" | " << std::setw(16) << getNumberPeople() <<" | "  <<std::setw(18) << bathroomWithBathString
     <<" | " << std::setw(8) << m_Bedrooms << " |"<<std::endl;

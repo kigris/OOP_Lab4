@@ -79,8 +79,9 @@ int (&displayBookingMenu(string bookingID))[2] {
 }
 
 // Display main menu
-void displayMainMenu() {
+void displayMainMenu(string name) {
     cout << "Welcome to the Vacation Park Management System" << endl;
+    cout << "Managing Vacation Park "<<name<<endl;
     cout << tabSpace();
     cout << "1. Access as Owner" << endl;
     cout << tabSpace();

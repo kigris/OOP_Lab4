@@ -19,7 +19,7 @@ namespace menus{
 int (&displayFileManagementMenu())[2];
 
 void displayCustomerMenu();
-void displayMainMenu();
+void displayMainMenu(string name);
 int (&displayCustomerLoginMenu(string name))[2];
 int (&displayBookingMenu(string bookingID))[2];
 int (&displayEmployeeMenu())[2];

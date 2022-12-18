@@ -9,7 +9,7 @@
 
 vector<string> VacationPark::g_Names = {};
 
-VacationPark::VacationPark(string name, string address){
+VacationPark::VacationPark(string name, string address, int VAT){
 #ifdef DEBUG
     std::cout<<"DEBUG: Creating vacation park with name: "<<name<<", address: "<<
     address<<", g_Names size before: "<<g_Names.size()<<std::endl;
@@ -18,13 +18,14 @@ VacationPark::VacationPark(string name, string address){
         throw std::invalid_argument("Duplicate name");
     }
     setAddress(address);
+    setVAT(VAT);
 #ifdef DEBUG
     std::cout<<"DEBUG: Successfully created vacation park with name: "<<name<<", address: "<<
     address<<", g_Names size after: "<<g_Names.size()<<std::endl;
 #endif
 }
 
-VacationPark::VacationPark(string name, string address, vector<unique_ptr<Park>> parks, vector<unique_ptr<Customer>> customers, vector<unique_ptr<Booking>> bookings){
+VacationPark::VacationPark(string name, string address, int VAT, vector<unique_ptr<Park>> parks, vector<unique_ptr<Customer>> customers, vector<unique_ptr<Booking>> bookings){
 #ifdef DEBUG
     std::cout<<"DEBUG: Creating vacation park with name: "<<name<<", address: "<<
     address<<", g_Names size before: "<<g_Names.size()<<std::endl;
@@ -69,7 +70,7 @@ bool VacationPark::setName(string name){
     return true;
 }
 
-void VacationPark::setVAT(string VAT) {
+void VacationPark::setVAT(int VAT) {
     m_VAT = VAT;
 }
 
