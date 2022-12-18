@@ -1,5 +1,7 @@
 # OOP_Lab4
 
+Disclaimer: This project was written for Linux and MacOS. It was created using XCode and the project is included. It is not intended to work on Windows, and probably will not.
+
 To run the project, first you have to generate all the necessary "make" files by using CMake. From the root directory of this project run:
 ```
 cmake --fresh -S . -B out/build/
